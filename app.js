@@ -5,7 +5,7 @@ var express                 = require('express'),
     passportLocalMongoose   = require('passport-local-mongoose'),
     mongoose                = require('mongoose'),
     flash                   = require('connect-flash'),
-    LOCALCONF               = require('local_conf'),
+    LOCALCONF               = require('./local_conf.js'),
     middleware              = require("./middleware");
 
 
