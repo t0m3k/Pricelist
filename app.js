@@ -4,7 +4,8 @@ var express                 = require('express'),
     LocalStrategy           = require('passport-local'),
     passportLocalMongoose   = require('passport-local-mongoose'),
     mongoose                = require('mongoose'),
-    flash                   = require('connect-flash'), 
+    flash                   = require('connect-flash'),
+    LOCALCONF               = require('local_conf'),
     middleware              = require("./middleware");
 
 
@@ -66,6 +67,6 @@ app.get("*", function(req, res){
     res.render("partials/404")
 });
 
-app.listen(8888, 'localhost', function(){
+app.listen(LOCALCONF.PORT, LOCALCONF.IP, function(){
     console.log('Server is running!');
 });
