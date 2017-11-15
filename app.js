@@ -66,6 +66,6 @@ app.get("*", function(req, res){
     res.render("partials/404")
 });
 
-app.listen(1337, 'localhost', function(){
+app.listen(8888, 'localhost', function(){
     console.log('Server is running!');
 });
