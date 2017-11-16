@@ -64,7 +64,7 @@ app.use("/pricelist", pricelistRoutes);
 
 // CATCH ALL
 app.get("*", function(req, res){
-    res.render("partials/404")
+    res.render("partials/404");
 });
 
 app.listen(LOCALCONF.PORT, LOCALCONF.IP, function(){

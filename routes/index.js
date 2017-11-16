@@ -39,12 +39,12 @@ router.post("/register", function(req, res) {
             res.redirect("/register");
         } else {
             passport.authenticate("local")(req, res, function(){
-                req.flash("success", "Signed in! Welcome, " + user.username)
+                req.flash("success", "Signed in! Welcome, " + user.username);
                 res.redirect("/");
-            })
+            });
         }
     }       
-)
+);
 });
 
 router.get("/logout", function(req, res) {
