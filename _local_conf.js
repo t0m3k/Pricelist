@@ -14,4 +14,6 @@ localConf.HOST = host;
 
 localConf.PORT = port;
 
+localConf.MONGODB = mongoDB;
+
 module.exports = localConf;
