@@ -67,6 +67,6 @@ app.get("*", function(req, res){
     res.render("partials/404");
 });
 
-app.listen(LOCALCONF.PORT, LOCALCONF.IP, function(){
+app.listen(LOCALCONF.PORT, LOCALCONF.HOST, function(){
     console.log('Server is running!');
 });
