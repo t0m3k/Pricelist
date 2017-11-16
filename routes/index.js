@@ -33,7 +33,7 @@ router.post("/register", function(req, res) {
     }), 
     req.body.password,
     function(err, user){
-        if(err) {
+        if(err || !user) {
             console.log(err);
             req.flash("error", err.message);
             res.redirect("/register");
@@ -49,6 +49,7 @@ router.post("/register", function(req, res) {
 
 router.get("/logout", function(req, res) {
     req.logout();
+    req.flash("success", "Logged out!")
     res.redirect("/");
 });
 
