@@ -113,16 +113,12 @@ function removeParts() {
     console.log("Removing all parts");
     $("#partNumber").val('');
     $("#partAmount").val('1');
-    if(parts_tmp) {
-        $('#partsDiv').addClass('hidden');
-        parts_tmp = [];
-
-    };
+    $('#partsDiv').addClass('hidden');
+    parts_tmp = [];
 };
 
 function editPriceRow(row) {
     var data = JSON.stringify(mainData[row]);
-    console.log(data);
     $.ajax({
         type: "POST",
         url: sql_setprice + mainData[row].id,
@@ -137,7 +133,6 @@ function editPriceRow(row) {
 
 function sendParts(id) {
     var data = JSON.stringify(mainData[id].parts);
-    console.log(data);
     $.ajax({
         type: "POST",
         url: sql_setparts + mainData[id].id,

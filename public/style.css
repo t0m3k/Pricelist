@@ -1,7 +1,11 @@
+body {
+    font-family: Roboto;  
+}
+
 .btn {
     margin-left: 10px;
 }
 
-body {
-    font-family: Roboto;  
+.hidden {
+    display: none;
 }
