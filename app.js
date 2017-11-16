@@ -21,6 +21,12 @@ var app = express();
 
 mongoose.Promise = global.Promise;
 
+// ENV VARIABLES
+
+const PORT = process.env.PORT || LOCALCONF.PORT;
+const HOST = process.env.HOST || LOCALCONF.HOST;
+const MONGODB = process.env.MONGODB || LOCALCONF.MONGODB;
+
 // FLASH MESSAGES
 app.use(flash());
 
@@ -51,7 +57,7 @@ app.use(function(req, res, next){
     next();
  });
 
-mongoose.connect('mongodb://localhost/aurora', {
+mongoose.connect(MONGODB, {
     useMongoClient: true
   });
 
@@ -67,6 +73,6 @@ app.get("*", function(req, res){
     res.render("partials/404");
 });
 
-app.listen(LOCALCONF.PORT, LOCALCONF.HOST, function(){
+app.listen(PORT, HOST, function(){
     console.log('Server is running!');
 });
