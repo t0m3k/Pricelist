@@ -41,8 +41,10 @@ $(document).ready(function () {
 });
 
 // get data and draw table
-// TODO - rewrite to use jquery
 function jsonFromPhp() {
+    console.log("Loading!!");
+
+    $("table").html('<div class="spinner"></div><h1 class="text-center">LOADING...</h1>');
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -58,7 +60,7 @@ function jsonFromPhp() {
             Main();
         }
     };
-    xmlhttp.open("POST", sql_getall, true);
+    xmlhttp.open("GET", sql_getall, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
 };
