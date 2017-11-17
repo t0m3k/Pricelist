@@ -28,44 +28,39 @@
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">ePOS</a>
-
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a  class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item"><a  class="nav-link" href="/pricelist">Pricelist</a></li>
-                        <li class="nav-item"><a  class="nav-link" href="/about">About</a></li>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a  class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a  class="nav-link" href="/pricelist">Pricelist</a></li>
+                    <li class="nav-item"><a  class="nav-link" href="/about">About</a></li>
+                </ul>
+                <div class="my-4 my-lg-0">
+                    <ul class="navbar-nav">
+                        <%
+                            if(!currentUser) {
+                        %>
+                            <li class="nav-item">
+                                <a  class="btn btn-success mx-lg-2 my-lg-0 my-1" href="/login">Log in</a>
+                            </li>
+                            <li class="nav-item text-warning">
+                                <a  class="btn btn-warning mx-lg-2 my-lg-0 my-1" href="/register">Register</a>
+                            </li>
+                        <%  } else { %>
+                                <% if(currentUser.isAdmin){ %>
+                                    <li class="nav-item">
+                                        <a  class="btn btn-dark mx-lg-2 my-lg-0 my-1" href="/admin">Admin</a>
+                                    </li>
+                            <%  } %>
+                            <li class="nav-item">
+                                <a  class="btn btn-danger mx-lg-2 my-lg-0 my-1" href="/logout">Logout</a>
+                            </li>
+                        <% } %>
                     </ul>
-                    <div class="my-2 my-lg-0">
-                        <ul class="navbar-nav mr-auto">
-                            <%
-                                if(!currentUser) {
-                            %>
-                                <li class="nav-item">
-                                    <a  class="btn btn-success" href="/login">Log in</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a  class="btn btn-secondary" href="/register">Register</a>
-                                </li>
-                            <%  } else { %>
-                                <li class="nav-item">
-                                    <p class="navbar-text">Hello, <%= currentUser.username %></p>
-                                </li> 
-                                    <% if(currentUser.isAdmin){ %>
-                                        <li class="nav-item">
-                                            <a  class="btn btn-dark" href="/admin">Admin</a>
-                                        </li>
-                                <%  } %>
-                                <li class="nav-item">
-                                    <a  class="btn btn-danger" href="/logout">Logout</a>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </div>
                 </div>
+            </div>
         </nav>
 
         <main role="main" class="container">
