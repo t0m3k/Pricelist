@@ -4,12 +4,12 @@ var passport                = require('passport'),
 var router = express.Router();
 
 router.get("/", function(req, res) {
-    res.render("home");
+    res.render("index/home");
 });
 
 // login route
 router.get("/login", function(req, res) {
-    res.render("login");
+    res.render("index/login");
 });
 
 // handling login
@@ -28,7 +28,7 @@ router.get("/register", function(req, res) {
         req.flash("error", "You are logged in!");
         return res.redirect("/");
     }
-    res.render("register");
+    res.render("index/register");
 });
 
 // handling user sign up
