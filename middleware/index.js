@@ -19,11 +19,21 @@ middlewareObj.isAdmin = function(req, res, next) {
     });
 }; 
 
+middlewareObj.canRead = function(req, res, next) {
+    middlewareObj.isLoggedIn(req, res, function(){
+        if(req.user.read === true) {
+            return next();
+        }
+        req.flash("error", "You don't have permission to do that!");
+        res.redirect("/");
+    });
+}; 
+
 middlewareObj.isLoggedInJSON = function(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
     }
-    res.send("Not logged in");
+    res.send({});
 };
 
  module.exports = middlewareObj;
