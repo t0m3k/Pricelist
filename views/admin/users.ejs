@@ -14,16 +14,16 @@
                     }() %>"><%= user.nickname %></h4>
                     <p class="card-text"><%= user.username %></p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.isAdmin ? 'checked':'' %>>Admin</li>
-                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.emailConf ? 'checked':'' %>>Confirmed</li>
-                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.read ? 'checked':'' %>>Read</li>
-                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.write ? 'checked':'' %>>Write</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.isAdmin ? 'check-':'' %>square" aria-hidden="true"></i> Admin</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-':'' %>square" aria-hidden="true"></i> Email confirmed</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.read ? 'check-':'' %>square" aria-hidden="true"></i> Read</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.write ? 'check-':'' %>square" aria-hidden="true"></i> Write</li>
                     </ul>
                 </div>
                 <div class="card-body">
-                    <a href="users/<%= user._id %>" class="card-link">Edit</a>
-                    <form class="inline" id="delete<%= user._id %>" action="users/<%= user._id %>?_method=DELETE" method="POST">
-                        <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link text-danger">Delete</a>
+                    <a href="users/<%= user._id %>" class="card-link btn btn-secondary">Edit</a>
+                    <form class="float-right" id="delete<%= user._id %>" action="users/<%= user._id %>?_method=DELETE" method="POST">
+                        <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
                     </form>
                 </div>
             </div>
