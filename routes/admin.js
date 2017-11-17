@@ -4,7 +4,7 @@ var express                 = require('express'),
 var router = express.Router({mergeParams: true});
 
 router.get("/", middleware.isAdmin, function(req, res) {
-    res.send("You're admin");
+    res.render("admin/index");
 });
 
 router.get("/users", middleware.isAdmin, function(req, res) {

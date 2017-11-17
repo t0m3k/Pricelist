@@ -28,18 +28,28 @@ router.get("/register", function(req, res) {
 
 // handling user sign up
 router.post("/register", function(req, res) {
+    console.log(req.body.nickname);
+    
     User.register(new User({
-        username: req.body.username
+        username: req.body.username,
+        nickname: req.body.nickname,
+        emailConf: false,
+        read: false,
+        write: false,
+        isAdmin: false
     }), 
     req.body.password,
     function(err, user){
         if(err || !user) {
             console.log(err);
+            console.log(user.nickname);
             req.flash("error", err.message);
             res.redirect("/register");
         } else {
+            console.log("We are in else!!");
+            console.log(req);
             passport.authenticate("local")(req, res, function(){
-                req.flash("success", "Signed in! Welcome, " + user.username);
+                req.flash("success", "Signed in! Welcome, " + user.nickname);
                 res.redirect("/");
             });
         }
