@@ -4,10 +4,14 @@
 
 <div class="row">
     <% users.forEach(user => { %> 
-        <div class="col-sm-3">
+        <div class="col-xl-3 col-lg-4 col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title"><%= user.nickname %></h4>
+                    <h4 class="card-title<%= function(){
+                        if(user.username==currentUser.username){
+                            return " text-danger";
+                        }
+                    }() %>"><%= user.nickname %></h4>
                     <p class="card-text"><%= user.username %></p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Admin: <%= user.isAdmin %></li>
@@ -18,7 +22,9 @@
                 </div>
                 <div class="card-body">
                     <a href="users/<%= user._id %>" class="card-link">Edit</a>
-                    <a href="users/<%= user._id %>" class="card-link text-danger">Delete</a>
+                    <form class="inline" id="delete<%= user._id %>" action="users/<%= user._id %>?_method=DELETE" method="POST">
+                        <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link text-danger">Delete</a>
+                    </form>
                 </div>
             </div>
         </div>

@@ -17,4 +17,10 @@ router.get("/users", middleware.isAdmin, function(req, res) {
     });
 });
 
+// USER DELETE ROUTE
+
+router.delete("/users/:id", middleware.isAdmin, function(req, res) {
+    res.send("You have reached the delete route");
+});
+
 module.exports = router;
