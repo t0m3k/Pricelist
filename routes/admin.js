@@ -9,8 +9,12 @@ router.get("/", middleware.isAdmin, function(req, res) {
 
 router.get("/users", middleware.isAdmin, function(req, res) {
     User.find({}, function(err, users){
-        res.send(users[0].username);
-    })
+        if(err){
+            console.log("Problems with getting users for admin/users: " + err);
+            return res.redirect("back");
+        }
+        res.render("admin/users", {users: users});
+    });
 });
 
 module.exports = router;
