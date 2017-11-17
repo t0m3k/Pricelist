@@ -15,7 +15,8 @@ router.get("/login", function(req, res) {
 // handling login
 router.post("/login", passport.authenticate("local", {
         successRedirect: "/",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true
     }),
     function(req, res) {
     
@@ -23,13 +24,19 @@ router.post("/login", passport.authenticate("local", {
 
 // user sign up form
 router.get("/register", function(req, res) {
+    if(req.user){
+        req.flash("error", "You are logged in!");
+        return res.redirect("/");
+    }
     res.render("register");
 });
 
 // handling user sign up
-router.post("/register", function(req, res) {
-    console.log(req.body.nickname);
-    
+router.post("/register", function(req, res) {    
+    if(req.user){
+        req.flash("error", "You are logged in!");
+        return res.redirect("/");
+    }
     User.register(new User({
         username: req.body.username,
         nickname: req.body.nickname,
@@ -37,24 +44,24 @@ router.post("/register", function(req, res) {
         read: false,
         write: false,
         isAdmin: false
-    }), 
-    req.body.password,
-    function(err, user){
-        if(err || !user) {
-            console.log(err);
-            console.log(user.nickname);
-            req.flash("error", err.message);
-            res.redirect("/register");
-        } else {
-            console.log("We are in else!!");
-            console.log(req);
-            passport.authenticate("local")(req, res, function(){
-                req.flash("success", "Signed in! Welcome, " + user.nickname);
-                res.redirect("/");
-            });
-        }
-    }       
-);
+        }), 
+        req.body.password,
+        function(err, user){
+            if(err || !user) {
+                console.log(err);
+                console.log(user.nickname);
+                req.flash("error", err.message);
+                res.redirect("/register");
+            } else {
+                console.log("We are in else!!");
+                console.log(req);
+                passport.authenticate("local")(req, res, function(){
+                    req.flash("success", "Signed in! Welcome, " + user.nickname);
+                    res.redirect("/");
+                });
+            }
+        }       
+    );
 });
 
 router.get("/logout", function(req, res) {
