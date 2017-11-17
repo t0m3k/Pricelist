@@ -2,10 +2,27 @@
 
 <h1>All users:</h1>
 
-<ul>
-<% users.forEach(user => { %>            
-    <li><%= user.username %></li>
-<% }); %>
-</ul>
+<div class="row">
+    <% users.forEach(user => { %> 
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title"><%= user.nickname %></h4>
+                    <p class="card-text"><%= user.username %></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Admin: <%= user.isAdmin %></li>
+                        <li class="list-group-item">Confirmed: <%= user.emailConf %></li>
+                        <li class="list-group-item">Read: <%= user.read %></li>
+                        <li class="list-group-item">Write: <%= user.write %></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <a href="users/<%= user._id %>" class="card-link">Edit</a>
+                    <a href="users/<%= user._id %>" class="card-link text-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>
 
 <% include ../partials/footer %>
