@@ -5,6 +5,7 @@ var express                 = require('express'),
     passportLocalMongoose   = require('passport-local-mongoose'),
     mongoose                = require('mongoose'),
     flash                   = require('connect-flash'),
+    methodOverride          = require('method-override'),
     LOCALCONF               = require('./local_conf.js'),
     middleware              = require("./middleware");
 
@@ -50,6 +51,10 @@ app.use(express.static(__dirname +"/public"));
 
 // USE ejs AS VIEW ENGINE
 app.set("view engine", "ejs");
+
+// CUSTOME SETTINGS
+
+app.use(methodOverride("_method"));
 
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
