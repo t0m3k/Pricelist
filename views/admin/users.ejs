@@ -5,7 +5,7 @@
 <div class="row">
     <% users.forEach(user => { %> 
         <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-body">
                     <h4 class="card-title<%= function(){
                         if(user.username==currentUser.username){
@@ -14,10 +14,10 @@
                     }() %>"><%= user.nickname %></h4>
                     <p class="card-text"><%= user.username %></p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Admin: <%= user.isAdmin %></li>
-                        <li class="list-group-item">Confirmed: <%= user.emailConf %></li>
-                        <li class="list-group-item">Read: <%= user.read %></li>
-                        <li class="list-group-item">Write: <%= user.write %></li>
+                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.isAdmin ? 'checked':'' %>>Admin</li>
+                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.emailConf ? 'checked':'' %>>Confirmed</li>
+                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.read ? 'checked':'' %>>Read</li>
+                        <li class="list-group-item"><input class="form-check-input" type="checkbox" disabled <%= user.write ? 'checked':'' %>>Write</li>
                     </ul>
                 </div>
                 <div class="card-body">
