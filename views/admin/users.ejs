@@ -1,11 +1,11 @@
 <% include ../partials/header %>
 
-<h1>Hello from Users!</h1>
-<%
-    users.forEach(user => {
-%>            
-    <%= user %>
-<%
-        });
-%>
+<h1>All users:</h1>
+
+<ul>
+<% users.forEach(user => { %>            
+    <li><%= user.username %></li>
+<% }); %>
+</ul>
+
 <% include ../partials/footer %>
