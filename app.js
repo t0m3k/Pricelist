@@ -14,7 +14,8 @@ var User                    = require('./models/user');
 
 // ROUTES INIT
 var indexRoutes             = require("./routes/index"),
-    pricelistRoutes         = require("./routes/pricelist");
+    pricelistRoutes         = require("./routes/pricelist"),
+    adminRoutes             = require("./routes/admin");
 
 
 var app = express();
@@ -66,6 +67,7 @@ mongoose.connect(MONGODB, {
 // ROUTES USE
 
 app.use(indexRoutes);
+app.use("/admin", adminRoutes);
 app.use("/pricelist", pricelistRoutes);
 
 // CATCH ALL
