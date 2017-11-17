@@ -2,12 +2,10 @@ var express                 = require('express'),
     bodyParser              = require('body-parser'),
     passport                = require('passport'),
     LocalStrategy           = require('passport-local'),
-    passportLocalMongoose   = require('passport-local-mongoose'),
     mongoose                = require('mongoose'),
     flash                   = require('connect-flash'),
     methodOverride          = require('method-override'),
-    LOCALCONF               = require('./local_conf.js'),
-    middleware              = require("./middleware");
+    LOCALCONF               = require('./local_conf.js');
 
 
 // MODELS

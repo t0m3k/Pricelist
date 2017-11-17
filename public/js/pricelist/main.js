@@ -1,7 +1,7 @@
 var mainData = [];
 var basket = [];
 var parts_tmp = [];
-var site_address = "http://tracz.me/samsung/" // the main page address fo db requests
+var site_address = "http://tracz.me/samsung/"; // the main page address fo db requests
 
 
 // below all address used for data queries
@@ -63,7 +63,7 @@ function jsonFromPhp() {
     xmlhttp.open("GET", sql_getall, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
-};
+}
 
 // function that wil check if part with partName exist and then run function cb with part object named partName
 function getPart(partName, cb) {
@@ -81,4 +81,4 @@ function getPart(partName, cb) {
     xmlhttp.open("POST", sql_getpart + partName, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
-};
+}

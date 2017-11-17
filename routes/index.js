@@ -17,10 +17,7 @@ router.post("/login", passport.authenticate("local", {
         successRedirect: "/",
         failureRedirect: "/login",
         failureFlash: true
-    }),
-    function(req, res) {
-    
-});
+    }));
 
 // user sign up form
 router.get("/register", function(req, res) {
