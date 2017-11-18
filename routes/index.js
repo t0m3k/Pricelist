@@ -50,8 +50,6 @@ router.post("/register", function(req, res) {
                 req.flash("error", err.message);
                 res.redirect("/register");
             } else {
-                console.log("We are in else!!");
-                console.log(req);
                 passport.authenticate("local")(req, res, function(){
                     req.flash("success", "Signed in! Welcome, " + user.nickname);
                     res.redirect("/");
