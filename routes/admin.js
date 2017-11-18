@@ -20,7 +20,26 @@ router.get("/users", middleware.isAdmin, function(req, res) {
 // USER DELETE ROUTE
 
 router.delete("/users/:id", middleware.isAdmin, function(req, res) {
-    res.send("You have reached the delete route");
+    User.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log("Problems with getting user for admin/user: " + err);
+            return res.redirect("/admin/users");
+        }
+        req.flash("success", "User removed!");
+        res.redirect("/admin/users");
+    });
+});
+
+//user edit route
+
+router.get("/users/:id", middleware.isAdmin, function(req, res) {
+    User.findById(req.params.id, function(err, user){
+        if(err || !user){
+            console.log("Problems with getting user for admin/user: " + err);
+            return res.redirect("/admin/users");
+        }
+        res.render("admin/user", {user: user});
+    });
 });
 
 module.exports = router;
