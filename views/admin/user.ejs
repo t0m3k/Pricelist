@@ -8,15 +8,15 @@
             <div class="card-body">
                 <h4 class="card-title<%= (user.username==currentUser.username)? ' text-success':'' %>"><%= user.nickname %></h4>
                 <p class="card-text"><%= user.username %></p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item pl-0"><i class="fa fa-<%= user.isAdmin ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Admin</li>
-                    <li class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Email confirmed</li>
-                    <li class="list-group-item pl-0"><i class="fa fa-<%= user.read ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Read</li>
-                    <li class="list-group-item pl-0"><i class="fa fa-<%= user.write ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Write</li>
-                </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item pl-0"><a><i class="fa fa-<%= user.isAdmin ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Admin</a></li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Email confirmed</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.read ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Read</li>
+                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.write ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Write</li>
+                    </ul>
             </div>
             <div class="card-body">
-                <a href="users/<%= user._id %>" class="card-link btn btn-secondary">Edit</a>
+                <a href="users/<%= user._id %>" class="card-link btn btn-success">Save</a>
                 <form class="float-right" id="delete<%= user._id %>" action="users/<%= user._id %>?_method=DELETE" method="POST">
                     <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
                 </form>

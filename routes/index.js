@@ -41,7 +41,7 @@ router.post("/register", function(req, res) {
         read: false,
         write: false,
         isAdmin: false
-        }), 
+        }),
         req.body.password,
         function(err, user){
             if(err || !user) {
@@ -55,7 +55,7 @@ router.post("/register", function(req, res) {
                     res.redirect("/");
                 });
             }
-        }       
+        }
     );
 });
 
