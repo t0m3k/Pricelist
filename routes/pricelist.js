@@ -7,7 +7,10 @@ router.get("/", middleware.canRead, function(req, res) {
 });
 
 router.get("/currentUser", middleware.isLoggedInJSON, function(req, res) {
-    res.send(req.user);
+    var priv = {};
+    priv.read = req.user.read;
+    priv.write = req.user.write;
+    res.send(priv);
 });
 
 module.exports = router;

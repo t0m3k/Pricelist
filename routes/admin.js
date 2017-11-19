@@ -49,7 +49,25 @@ router.put("/users/:id", middleware.isAdmin, function(req, res) {
             console.log("Problems with getting user for admin/user: " + err);
             return res.redirect("/admin/users");
         }
-        res.redirect("admin/user/" + req.param.id);
+        var newU = req.body.user;
+        if("isAdmin" in newU) {
+            user.isAdmin = newU.isAdmin;
+        }
+        if("emailConf" in newU) {
+            user.emailConf = newU.emailConf;
+        }
+        if("read" in newU) {
+            user.read = newU.read;
+        }
+        if("write" in newU) {
+            user.write = newU.write;
+        }
+        User.findByIdAndUpdate(user._id, user, err =>{
+            if(err){
+                console.log(err);
+            }
+        });
+        res.redirect("/admin/users/" + req.params.id);
     });
 });
 
