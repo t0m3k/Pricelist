@@ -18,8 +18,8 @@ function postUser() {
     if(!$.isEmptyObject(user)){
         $.ajax({
             type: "POST",
-            url: $(location).attr('href'),
-            data: user,
-          }).done(showPopUp("Success!", user));
+            url: $(location).attr('href') + "?_method=PUT",
+            data: {user: user},
+          }).done(showPopUp);
     }
 }
