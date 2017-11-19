@@ -23,10 +23,27 @@ var dtholder_name = "dATAhOLDER";
 var edit = true;
 var stopper;
 
+var objectsData = [];
+
 
 // It'll run when all data is retrieved frim databse and table is fully drawn.
 function Main() {
     checkList();
+    mainData.forEach(repair => {
+        var object = {};
+        object.repair = repair.part;
+        object.labour = repair.labour;
+        object.second = repair.second;
+        object.min = repair.min;
+        if(repair.parts){
+            object.parts = repair.parts;
+        }
+        if(!(repair.model in objectsData)){
+            objectsData[repair.model] = [];
+        }
+        objectsData[repair.model].push(object);
+    });
+    console.log(objectsData);
 }
 
 function checkList() {
@@ -59,14 +76,14 @@ function jsonFromPhp() {
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            mainData = JSON.parse(this.responseText);
-            for (var i = 0; i < mainData.length; i++) {
-                mainData[i].cost = parseFloat(mainData[i].cost);
-                mainData[i].labour = parseFloat(mainData[i].labour);
-                if(mainData[i].model == dtholder_name ) {
+            mainData = JSON.parse(this.responseText).map(function(element, i){
+                element.cost = parseFloat(element.cost);
+                element.labour = parseFloat(element.labour);
+                if(element.model == dtholder_name ) {
                     dataholder = i; // save the dataholder position
                 }
-            }
+                return element;
+            });
             drawTable();
             Main();
         }
