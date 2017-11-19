@@ -43,7 +43,7 @@
     </div>
   </div>
   
-  
+<% if(currentUser.write){ %>
   
   <div id="partForm" style="display: none; width: 600px; height: 800px;">
   <form id="formElement">
@@ -101,14 +101,18 @@
   </form>
   </div>
   
+ <%  } %>
   
   <pre id="csv" class="hidden"></pre>
   <script src="/js/pricelist/table.js"></script>
-  <script src="/js/pricelist/forms.js"></script>
   <script src="/js/pricelist/helpers.js"></script>
   <script src="/js/pricelist/data.js"></script>
   <script src="/js/pricelist/main.js"></script>
   <script src="/js/pricelist/style.js"></script>
+
+<% if(currentUser.write){ %>
+  <script src="/js/pricelist/forms.js"></script>
+ <%  } %>
 
 
   <% include partials/footer %>
