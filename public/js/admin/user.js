@@ -16,6 +16,10 @@ $('li').click(function(){
 
 function postUser() {
     if(!$.isEmptyObject(user)){
-        $('#myModal').modal('toggle');
+        $.ajax({
+            type: "POST",
+            url: $(location).attr('href'),
+            data: user,
+          }).done(showPopUp("Success!", user));
     }
 }
