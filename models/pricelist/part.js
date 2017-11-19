@@ -6,4 +6,4 @@ var PartSchema = mongoose.Schema({
     cost: mongoose.Schema.Types.Decimal
 });
 
-module.exports = mongoose.model("Price", PartSchema);
+module.exports = mongoose.model("Part", PartSchema);

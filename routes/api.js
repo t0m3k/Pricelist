@@ -1,4 +1,8 @@
 var express                 = require('express'),
+    Model                   = require('../models/pricelist/model'),
+    Part                    = require('../models/pricelist/part'),
+    Price                   = require('../models/pricelist/Price'),
+    PricePart               = require('../models/pricelist/PricePart'),
     middleware              = require("../middleware"),
     axios                   = require("axios");
 var router = express.Router({mergeParams: true});
@@ -20,6 +24,7 @@ router.get("/pricelist", function(req, res) {
         data.data.forEach(repair => {
             var saveTo = repair.model;
             delete repair.model;
+            delete repair.id;
             if(!(saveTo in objectsData)){
                 objectsData[saveTo] = [];
             }
@@ -30,6 +35,11 @@ router.get("/pricelist", function(req, res) {
     .catch(function(err){
         console.log("Error: " + err);
     });
+});
+
+
+router.get("*", function(req, res){
+    res.send({});
 });
 
 module.exports = router;
