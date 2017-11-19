@@ -1,4 +1,4 @@
-function showPopUp(title, body) {
+function showPopUp(title, body, timeout) {
     if(title) {
         $('#popUpTitle').text(title);
     }
@@ -6,4 +6,9 @@ function showPopUp(title, body) {
         $('#popUpBody').text(body);
     }
     $('#popUpMessage').modal('show');
+    if(timeout){
+        setTimeout(function(){
+            $('#popUpMessage').modal('hide')}
+            , timeout);
+    }
 }
