@@ -30,15 +30,26 @@ router.delete("/users/:id", middleware.isAdmin, function(req, res) {
     });
 });
 
-//user edit route
+//user show edit route
 
 router.get("/users/:id", middleware.isAdmin, function(req, res) {
+    User.findById(req.params.id, function(err, user){
+        if(err || !user){
+            console.log("Problems with getting user for admin/users/id: " + err);
+            return res.redirect("/admin/users");
+        }
+        res.render("admin/user", {user: user});
+    });
+});
+
+// user edit route
+router.put("/users/:id", middleware.isAdmin, function(req, res) {
     User.findById(req.params.id, function(err, user){
         if(err || !user){
             console.log("Problems with getting user for admin/user: " + err);
             return res.redirect("/admin/users");
         }
-        res.render("admin/user", {user: user});
+        res.redirect("admin/user/" + req.param.id);
     });
 });
 
