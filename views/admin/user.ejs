@@ -9,14 +9,14 @@
                 <h4 class="card-title<%= (user.username==currentUser.username)? ' text-success':'' %>"><%= user.nickname %></h4>
                 <p class="card-text"><%= user.username %></p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item pl-0"><a><i class="fa fa-<%= user.isAdmin ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Admin</a></li>
-                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Email confirmed</li>
-                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.read ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Read</li>
-                        <li class="list-group-item pl-0"><i class="fa fa-<%= user.write ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Write</li>
+                        <li id="isAdmin" class="list-group-item pl-0"><i class="fa fa-<%= user.isAdmin ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Admin</li>
+                        <li id="emailConf" class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Email confirmed</li>
+                        <li id="read" class="list-group-item pl-0"><i class="fa fa-<%= user.read ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Read</li>
+                        <li id="write" class="list-group-item pl-0"><i class="fa fa-<%= user.write ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Write</li>
                     </ul>
             </div>
             <div class="card-body">
-                <a href="users/<%= user._id %>" class="card-link btn btn-success">Save</a>
+                <a href="javascript:;" onclick="postUser()" class="card-link btn btn-success">Save</a>
                 <form class="float-right" id="delete<%= user._id %>" action="users/<%= user._id %>?_method=DELETE" method="POST">
                     <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
                 </form>
@@ -24,5 +24,22 @@
         </div>
     </div>
 </div>
+
+<div id="myModal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content"><div class="modal-header">
+        <h5 id="popUpTitle" class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="popUpBody">Modal body text goes here.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/admin/user.js"></script>
 
 <% include ../partials/footer %>
