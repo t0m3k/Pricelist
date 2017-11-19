@@ -11,12 +11,17 @@ var sql_getpart = site_address + "pricelist/data/get_part/";
 var sql_setparts  = site_address + "pricelist/data/set_parts/";
 var sql_setprice  = site_address + "pricelist/data/set_price/";
 
+// privileges of current user
+
+var user;
+
 // dataholder is localization in mainData where temoporary data is holded
 var dataholder = -1;
 var dtholder_name = "dATAhOLDER";
 
 
 var edit = true;
+var stopper;
 
 
 // It'll run when all data is retrieved frim databse and table is fully drawn.
@@ -37,14 +42,20 @@ function checkList() {
 
 // Run function that will receive pricelist from database
 $(document).ready(function () {
+    getUser();
     jsonFromPhp();
 });
 
 // get data and draw table
 function jsonFromPhp() {
-    console.log("Loading!!");
-
     $("table").html('<div class="spinner"></div><h1 class="text-center">LOADING...</h1>');
+    if(!user || !user.read) {
+        stopper = setInterval(function(){
+            if(user.read){
+                clearInterval(stopper);
+            }
+        }, 300);
+    }
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -81,4 +92,17 @@ function getPart(partName, cb) {
     xmlhttp.open("POST", sql_getpart + partName, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
+}
+
+function getUser() {
+    var url = urlAdd($(location).attr('href'), "currentUser");
+    $.get(url)
+    .done(data => {
+        user = data;
+    });
+}
+
+
+function urlAdd(first, second) {
+    return first[first.length - 1] == '/' ? first + second : first + '/' + second;
 }

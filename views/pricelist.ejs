@@ -6,9 +6,11 @@
         <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
       </form>
       <ul class="navbar-nav mr-auto">
+        <% if(currentUser.write){ %>
         <li class="nav-item pl-2">
           <a class="nav-link btn btn-outline-success btn-sm" href="javascript:;" data-fancybox data-src="#partForm" onclick="editPriceForm()">Add field</a>
         </li>
+        <%  } %>
         <li class="nav-item pl-2">
           <a class="nav-link btn btn-outline-danger btn-sm" href="javascript:;" onclick="refreshTable()" >Refresh</a>
         </li>
@@ -16,7 +18,9 @@
       <span class="navbar-text">
         1: <span class="text-success" id="basket"></span>
         2: <span class="text-info" id="min"></span>
+        <% if(currentUser.write){ %>
         3: <span class="text-danger" id="partscost"></span>
+        <%  } %>
       </span>
   </nav>
   
