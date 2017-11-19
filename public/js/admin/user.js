@@ -11,7 +11,6 @@ $('li').click(function(){
 
     // save elemend id ass attribute for user class
     user[attr] = $(this).children('i').hasClass("text-success");
-    console.log(user);
 });
 
 function postUser() {
@@ -20,6 +19,10 @@ function postUser() {
             type: "POST",
             url: $(location).attr('href') + "?_method=PUT",
             data: {user: user},
-          }).done(showPopUp);
+          }).done(function(){
+              showPopUp("Success!", "Your changes have been saved.", 1500);
+          });
+    } else {
+        showPopUp("Error!", "Nothing to save!", 1500);
     }
 }

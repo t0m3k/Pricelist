@@ -6,8 +6,15 @@
     <div class="col mw500">
         <div class="card mt-4">
             <div class="card-body">
-                <h4 class="card-title<%= (user.username==currentUser.username)? ' text-success':'' %>"><%= user.nickname %></h4>
-                <p class="card-text"><%= user.username %></p>
+                <h4 class="card-title<%= (user.username==currentUser.username)? ' text-success':'' %>">
+                    <%= user.nickname %>
+                    <% if(user.username==currentUser.username){ %>
+                        (You)
+                    <% } %>
+                </h4>
+                <p class="card-text">
+                    <%= user.username %>
+                </p>
                     <ul id="user-settings" class="list-group list-group-flush">
                         <li id="isAdmin" class="list-group-item pl-0"><i class="fa fa-<%= user.isAdmin ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Admin</li>
                         <li id="emailConf" class="list-group-item pl-0"><i class="fa fa-<%= user.emailConf ? 'check-square text-success':'square text-danger' %>" aria-hidden="true"></i> Email confirmed</li>
@@ -17,9 +24,11 @@
             </div>
             <div class="card-body">
                 <a href="javascript:;" onclick="postUser()" class="card-link btn btn-success">Save</a>
-                <form class="float-right" id="delete<%= user._id %>" action="/admin/users/<%= user._id %>?_method=DELETE" method="POST">
-                    <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
-                </form>
+                <% if(!user.username==currentUser.username){ %>
+                    <form class="float-right" id="delete<%= user._id %>" action="/admin/users/<%= user._id %>?_method=DELETE" method="POST">
+                        <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
+                    </form>
+                <% } %>
             </div>
         </div>
     </div>
