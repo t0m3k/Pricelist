@@ -31,7 +31,7 @@ function Main() {
     checkList();
     mainData.forEach(repair => {
         var object = {};
-        object.repair = repair.part;
+        object.part = repair.part;
         object.labour = repair.labour;
         object.second = repair.second;
         object.min = repair.min;
@@ -47,7 +47,6 @@ function Main() {
 }
 
 function checkList() {
-
     if(dataholder == -1) {
         console.log("No dataholder!");
         newDataHolder();
