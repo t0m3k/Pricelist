@@ -24,7 +24,7 @@
             </div>
             <div class="card-body">
                 <a href="javascript:;" onclick="postUser()" class="card-link btn btn-success">Save</a>
-                <% if(!user.username==currentUser.username){ %>
+                <% if(!(user.username==currentUser.username)){ %>
                     <form class="float-right" id="delete<%= user._id %>" action="/admin/users/<%= user._id %>?_method=DELETE" method="POST">
                         <a href="javascript:;" onclick="$('#delete<%= user._id %>').submit();" class="card-link btn btn-danger">Delete</a>
                     </form>
