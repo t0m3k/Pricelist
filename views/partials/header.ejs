@@ -64,4 +64,16 @@
         </nav>
 
         <main role="main" class="container-fluid mw1200">
+
+
+        <% if(errorMsg && errorMsg.length > 0) { %>
+            <div class="alert alert-danger my-3" role="alert">
+                <%= errorMsg %>
+            </div>
+        <% } %>
+        <% if(successMsg && successMsg.length > 0) { %>
+            <div class="alert alert-success my-3" role="alert">
+                <%= successMsg %>
+            </div>
+        <% } %>
             
