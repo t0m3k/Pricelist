@@ -1,22 +1,22 @@
 <% include partials/header %>
 
-<nav class="navbar navbar-expand sticky-top navbar-light bg-light">
+<nav class="navbar navbar-expand sticky-top navbar-dark bg-dark">
     <form class="form-inline my-2 my-lg-0">
         <input type="search" value="" placeholder="Search" class="form-control" id="searchBox">
         <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
       </form>
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+        <li class="nav-item pl-2">
           <a class="nav-link btn btn-outline-success btn-sm" href="javascript:;" data-fancybox data-src="#partForm" onclick="editPriceForm()">Add field</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item pl-2">
           <a class="nav-link btn btn-outline-danger btn-sm" href="javascript:;" onclick="refreshTable()" >Refresh</a>
         </li>
       </ul>
       <span class="navbar-text">
-        1: <span id="basket"></span>
-        2: <span id="min"></span>
-        3: <span id="partscost"></span>
+        1: <span class="text-success" id="basket"></span>
+        2: <span class="text-info" id="min"></span>
+        3: <span class="text-danger" id="partscost"></span>
       </span>
   </nav>
   
