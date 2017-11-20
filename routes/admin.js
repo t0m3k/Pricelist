@@ -17,18 +17,6 @@ router.get("/users", middleware.isAdmin, function(req, res) {
     });
 });
 
-// USER DELETE ROUTE
-
-router.delete("/users/:id", middleware.isAdmin, function(req, res) {
-    User.findByIdAndRemove(req.params.id, function(err){
-        if(err){
-            console.log("Problems with getting user for admin/user: " + err);
-            return res.redirect("/admin/users");
-        }
-        req.flash("success", "User removed!");
-        res.redirect("/admin/users");
-    });
-});
 
 //user show edit route
 
@@ -39,35 +27,6 @@ router.get("/users/:id", middleware.isAdmin, function(req, res) {
             return res.redirect("/admin/users");
         }
         res.render("admin/user", {user: user});
-    });
-});
-
-// user edit route
-router.put("/users/:id", middleware.isAdmin, function(req, res) {
-    User.findById(req.params.id, function(err, user){
-        if(err || !user){
-            console.log("Problems with getting user for admin/user: " + err);
-            return res.redirect("/admin/users");
-        }
-        var newU = req.body.user;
-        if("isAdmin" in newU) {
-            user.isAdmin = newU.isAdmin;
-        }
-        if("emailConf" in newU) {
-            user.emailConf = newU.emailConf;
-        }
-        if("read" in newU) {
-            user.read = newU.read;
-        }
-        if("write" in newU) {
-            user.write = newU.write;
-        }
-        User.findByIdAndUpdate(user._id, user, err =>{
-            if(err){
-                console.log(err);
-            }
-        });
-        res.redirect("/admin/users/" + req.params.id);
     });
 });
 
