@@ -17,30 +17,27 @@ $("#partForm").submit(function (e) {
 
 
 // updates add/edit form with element that will be edited or dataholder if adding new element
-function editPriceForm(id = false) {
+function editPrice(modelId, priceId) {
     clearAddForm(); // clears form and all tmp data
-    if (id === false) {
-        // if adding new element use dataholder
-        $("#localId").val(dataholder);
-        $("#editId").val(mainData[dataholder].id);
-        console.log("New item id: " + mainData[dataholder].id);
-    } else {
-        // if editing current element use it's data from mainData
-        $("#localId").val(id);
-        $("#model").val(mainData[id].model);
-        $("#part").val(mainData[id].part);
-        $("#labour").val(mainData[id].labour);
-        $("#minPercentage").val(mainData[id].min);
-        $("#second").val(mainData[id].second);
-        if (mainData[id].parts) {
-            parts_tmp = mainData[id].parts;
-            listParts(parts_tmp);
-
-        };
+    var model = mainData.find(model => {
+        return model._id == modelId;
+    });
+    console.log(model);
+    var part = model.prices.find(price => {
+        return price._id == priceId;
+    });
+    console.log(part);
+    $("#localId").val(priceId);
+    $("#part").val(part.name);
+    $("#labour").val(part.labour);
+    $("#minPercentage").val(part.min);
+    $("#second").val(part.second);
+    if (part.parts) {
+        listParts(part.parts);
         
-        console.log("Editing item id: " + mainData[id].id);
+        console.log("Editing item id: " + part._id);
     }
-};
+}
 
 // updates element in mainData with infro from form
 function updateFromForm() {
@@ -77,7 +74,7 @@ $("#addPartButton").click(function () {
                 amount: amount,
                 description: newPart.description,
                 cost: newPart.cost
-            })
+            });
             
             // add part to parts_tmp, they'll be saved to database when form is successfully submitted
             listParts(parts_tmp);
@@ -89,25 +86,25 @@ $("#addPartButton").click(function () {
             $("#partNumber").addClass("is-invalid");
             console.log("Couldn't find part number, check: " + sql_getpart);
         }
-    })
+    });
 });
 
 function listParts(parts) {
     var parts_html = '<div><label for="parts">Parts:</label></div>';
-    parts.forEach(function (part) {
-        parts_html += '<div class="row  top-buffer"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part + '"></div>';
+    parts.forEach((part) => {
+        parts_html += '<div class="row mt-3"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
         parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
         parts_html +=   '<div class="row"><div class="col-9">' +
-                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.description + '">' +
+                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.description + '">' +
                         '</div>' +
                         '<div class="col">' +
-                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.cost * 1.2).toFixed(2) + '">' +
+                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.part.cost * 1.2).toFixed(2) + '">' +
                         '</div></div>';
     }, this);
     
     parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer" onclick="removeParts()">Remove parts</a>';
     $('#partsDiv').removeClass('hidden').html(parts_html);
-};
+}
 
 function removeParts() {
     console.log("Removing all parts");
@@ -115,7 +112,7 @@ function removeParts() {
     $("#partAmount").val('1');
     $('#partsDiv').addClass('hidden');
     parts_tmp = [];
-};
+}
 
 function editPriceRow(row) {
     var data = JSON.stringify(mainData[row]);
@@ -129,7 +126,7 @@ function editPriceRow(row) {
             jsonFromPhp();
         }
     });
-};
+}
 
 function sendParts(id) {
     var data = JSON.stringify(mainData[id].parts);
@@ -142,27 +139,4 @@ function sendParts(id) {
             console.log(response);
         }
     });
-}
-
-function newDataHolder() {
-    var data = JSON.stringify({
-        model: dtholder_name,
-        part: dtholder_name,
-        labour: 0,
-        second: 0,
-        min: 0,
-        cost: 0
-    });
-    console.log("Creating dataholder");
-    $.ajax({
-        type: "POST",
-        url: sql_setprice,
-        data: data,
-        cache: false,
-        success: function (response) {
-            console.log(response);
-            jsonFromPhp();
-        }
-    });
-
 }

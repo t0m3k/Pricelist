@@ -26,6 +26,44 @@ router.get("/pricelist", function(req, res) {
     });
 });
 
+router.delete("/pricelist/:id", function(req, res) {
+    Model.findById(req.params.id).populate({path: "prices"}).exec((err, model) => {
+        if(err || !model){
+            console.log(err);
+        } else {
+            console.log("removing model");
+            model.prices.forEach(price => {
+                Price.findByIdAndRemove(price._id);
+            });
+            Model.findByIdAndRemove(req.params.id, err => {
+                if(err) {
+                    console.log(err);
+                }
+            });
+            res.send("Success!")
+        }
+    });
+});
+
+router.delete("/pricelist/:model/:price", function(req, res) {
+    Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
+        if(err || !model){
+            console.log(err);
+        } else {
+            if(!model.prices.every(price => {
+                return price._id != req.params.price;
+            })){
+                model.prices = model.prices.filter(price => {
+                    return price._id != req.params.price;
+                });
+                model.save();
+                Price.findByIdAndRemove(req.params.price);
+                res.send("Success!");
+            }
+        }
+    });
+});
+
 // all users
 
 router.get("/users", middleware.isAdmin, function(req, res) {
@@ -93,7 +131,7 @@ router.delete("/users/:id", middleware.isAdmin, function(req, res) {
 });
 
 router.get("*", function(req, res){
-    res.send({});
+    res.send({message: "this api doesn't exist!"});
 });
 
 module.exports = router;

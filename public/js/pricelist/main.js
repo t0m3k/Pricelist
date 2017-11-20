@@ -3,6 +3,8 @@ var basket = [];
 
 var objectsData = [];
 
+var loaded = false;
+
 // It'll run when all data is retrieved frim databse and table is fully drawn.
 function Main() {
     checkList();
@@ -19,6 +21,7 @@ $(document).ready(function () {
 
 // get data and draw table
 function getData(cb) {
+    loaded = false;
     $("table").html('<div class="spinner"></div><h1 class="text-center">LOADING...</h1>'); 
     var url = urlAdd($(location).attr('origin'), 'api/pricelist')
     $.get(url)
@@ -28,6 +31,7 @@ function getData(cb) {
             if(typeof cb === 'function'){
                 cb();
             }
+            loaded = true;
         });
 }
 
@@ -47,4 +51,8 @@ function getPart(partName, cb) {
     xmlhttp.open("POST", sql_getpart + partName, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
+}
+
+function addWrite() {
+
 }
