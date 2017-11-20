@@ -13,14 +13,17 @@ $('li').click(function(){
     user[attr] = $(this).children('i').hasClass("text-success");
 });
 
-function postUser() {
+function postUser(id) {
+    var url = urlAdd($(location).attr('origin'), `api/users/${ id }?_method=PUT`)
     if(!$.isEmptyObject(user)){
         $.ajax({
             type: "POST",
-            url: $(location).attr('href') + "?_method=PUT",
+            url: url,
             data: {user: user},
-          }).done(function(){
-              showPopUp("Success!", "Your changes have been saved.", 1500);
+          }).done(function(res){
+              if(res._id && res._id == id){
+                showPopUp("Success!", "Your changes have been saved.", 1500);
+              }
           });
     } else {
         showPopUp("Error!", "Nothing to save!", 1500);
