@@ -22,9 +22,8 @@ function addToBasket(id) {
         calcBasket();
     }
     else {
-        window.alert("Cannot use parts for " + mainData[id].model + 
-        " to repair: " + mainData[basket[basket.length - 1]].model + 
-        " bud");
+        showPopUp("Error!", "Cannot use parts for " + mainData[id].model + 
+        " to repair: " + mainData[basket[basket.length - 1]].model, 2000);
     }
     return id;
 };
@@ -73,5 +72,3 @@ function exportToCSV() {
     $('#csv').text(result).removeClass("hidden");
     
 };
-
-

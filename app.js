@@ -9,16 +9,18 @@ var express                 = require('express'),
 
 
 // MODELS
-var User                    = require('./models/user');
+var User                    = require('./src/models/user');
 
 // ROUTES INIT
-var indexRoutes             = require("./routes/index"),
-    pricelistRoutes         = require("./routes/pricelist"),
-    apiRoutes               = require("./routes/api"),
-    adminRoutes             = require("./routes/admin");
+var indexRoutes             = require("./src/routes/index"),
+    pricelistRoutes         = require("./src/routes/pricelist"),
+    apiRoutes               = require("./src/routes/api"),
+    adminRoutes             = require("./src/routes/admin");
 
 
 var app = express();
+
+app.set('views', __dirname + '/src/views');
 
 mongoose.Promise = global.Promise;
 
@@ -55,7 +57,7 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
-app.use(function(req, res, next){
+app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.errorMsg = req.flash("error");
     res.locals.successMsg = req.flash("success");
