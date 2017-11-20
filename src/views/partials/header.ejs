@@ -35,15 +35,16 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"><a  class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a  class="nav-link" href="/pricelist">Pricelist</a></li>
-                    <li class="nav-item"><a  class="nav-link" href="/sales">Sales</a></li>
-                    <li class="nav-item"><a  class="nav-link" href="/customers">Customers</a></li>
+                    <% if(currentUser && currentUser.write) { %>                    
+                        <li class="nav-item"><a  class="nav-link" href="/sales">Sales</a></li>
+                        <li class="nav-item"><a  class="nav-link" href="/customers">Customers</a></li>
+                    <%  } %>
+                    
                     <li class="nav-item"><a  class="nav-link" href="/about">About</a></li>
                 </ul>
                 <div class="my-4 my-lg-0">
                     <ul class="navbar-nav">
-                        <%
-                            if(!currentUser) {
-                        %>
+                        <% if(!currentUser) { %>
                             <li class="nav-item">
                                 <a  class="btn btn-success mx-lg-2 my-lg-0 my-1" href="/login">Log in</a>
                             </li>

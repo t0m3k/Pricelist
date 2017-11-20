@@ -3,7 +3,7 @@ function deleteRow(id) {
         console.log("No code to remove items :D");
         // TODO - Add code to remvoe items from list
     }
-};
+}
 
 
 function basketTrigger(id) {
@@ -14,61 +14,57 @@ function basketTrigger(id) {
     }
 }
 
-
 function addToBasket(id) {
-    if (basket.length == 0 || mainData[basket[basket.length - 1]].model == mainData[id].model) {
-        basket[basket.length] = id;
-        $("tr." + id).addClass("table-success");
-        calcBasket();
-    }
-    else {
-        showPopUp("Error!", "Cannot use parts for " + mainData[id].model + 
-        " to repair: " + mainData[basket[basket.length - 1]].model, 2000);
-    }
-    return id;
-};
+    basket[basket.length] = id;
+    $('#' + id).addClass("text-success");
+    calcBasket();
+}
 
 function removeFromBasket(id) {
-    $("tr." + id).removeClass("table-success");
+    $('#' + id).removeClass("text-success");
     var i = basket.indexOf(id);
-    if (i >= 0) {
-        basket[i] = -1;
-        basket.sort();
-        basket.shift();
-    };
+    basket = basket.filter(item => {
+        return item != id;
+    });
     calcBasket();
-};
+}
 
 function calcBasket() {
-    var sum = 0.00;
-    var min = 0.00;
-    var parts = 0.00;
-    basket.sort(function (a, b) {
-        return mainData[b].labour - mainData[a].labour;
+    var sum = parseFloat(0.00);
+    var min = parseFloat(0.00);
+    var parts = parseFloat(0.00);
+    mainData.forEach(model => {
+         var pricelist = model.prices.filter(price => {
+            return basket.includes(price._id);
+        });
+        pricelist.sort((a, b) => {
+            return parseFloat(a.labour) < parseFloat(b.labour);
+        });
+        pricelist.forEach((price, i) => {
+            var cost = 0;
+            price.parts.forEach(part => {
+                cost += parseFloat(part.part.cost) * part.amount;
+            });
+            if(i===0){
+                sum += parseFloat(cost) + parseFloat(price.labour);
+                min += parseFloat(cost) + (parseFloat(price.labour) * (parseFloat(price.min) / 100));
+                parts += parseFloat(cost);
+            } else {
+                sum+= parseFloat(cost) + parseFloat(price.labour) * (parseFloat(price.second) / 100);
+                min += parseFloat(cost) + (parseFloat(price.labour) * (parseFloat(price.min) / 100));                
+                parts += parseFloat(cost);
+            }
+        });
     });
-
-    for (var i = 0; i < basket.length; i++) {
-        if (i == 0) {
-            sum += mainData[basket[i]].cost + mainData[basket[i]].labour;
-            min += mainData[basket[i]].cost + (mainData[basket[i]].labour * (mainData[basket[i]].min / 100));
-            parts += mainData[basket[i]].cost;
-        } else {
-            sum += mainData[basket[i]].cost + (mainData[basket[i]].labour * (mainData[basket[i]].second / 100));
-            min += mainData[basket[i]].cost + (mainData[basket[i]].labour * (mainData[basket[i]].second / 100));
-            parts += mainData[basket[i]].cost;
-        };
-    };
     $("#basket").text(total_round(sum));
     $("#min").text(total_round(min));
     $("#partscost").text(parts.toFixed(2));
-};
-
+}
 
 function exportToCSV() {
     var result = "";
     for(var i = 0; i < mainData.length; i++) {
         result += mainData[i].model + ";" + mainData[i].part + ";" + total_round(mainData[i].cost + mainData[i].labour) + '\r\n';
     }
-    $('#csv').text(result).removeClass("hidden");
-    
-};
+    $('#csv').text(result).removeClass("hidden");   
+}

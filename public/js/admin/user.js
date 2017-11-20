@@ -14,7 +14,7 @@ $('li').click(function(){
 });
 
 function postUser(id) {
-    var url = urlAdd($(location).attr('origin'), `api/users/${ id }?_method=PUT`)
+    var url = urlAdd($(location).attr('origin'), `api/users/${ id }?_method=PUT`);
     if(!$.isEmptyObject(user)){
         $.ajax({
             type: "POST",
