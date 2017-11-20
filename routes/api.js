@@ -24,7 +24,7 @@ router.get("/pricelist", function(req, res) {
     .then(ax => {
         var objectsData = {};
         ax.data.forEach(repair => {
-            repair.price = repair.part;
+            repair.name = repair.part;
             var saveTo = repair.model;
             delete repair.part;
             delete repair.model;

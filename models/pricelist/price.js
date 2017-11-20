@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var PriceSchema = mongoose.Schema({
-    price: String,
+    name: String,
     labour: mongoose.Schema.Types.Decimal,
     second: Number,
     min: Number,
