@@ -117,8 +117,3 @@ function getUser() {
         user = data;
     });
 }
-
-
-function urlAdd(first, second) {
-    return first[first.length - 1] == '/' ? first + second : first + '/' + second;
-}
