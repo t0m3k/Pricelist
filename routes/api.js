@@ -10,6 +10,7 @@ var router = express.Router({mergeParams: true});
 router.get("/", function(req, res) {
     var priv = {};
     priv.description = "Your privileges";
+    priv.isAdmin = req.user ? req.user.isAdmin : false;
     priv.read = req.user ? req.user.read : false;
     priv.write = req.user ? req.user.write : false;
     res.send(priv);
