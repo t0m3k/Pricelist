@@ -2,7 +2,6 @@ var express                 = require('express'),
     Model                   = require('../models/pricelist/model'),
     Part                    = require('../models/pricelist/part'),
     Price                   = require('../models/pricelist/Price'),
-    PricePart               = require('../models/pricelist/PricePart'),
     User                    = require('../models/user'),
     middleware              = require("../middleware"),
     axios                   = require("axios");
@@ -18,82 +17,12 @@ router.get("/", function(req, res) {
 });
 
 router.get("/pricelist", function(req, res) {
-    var url = 'http://tracz.me/samsung/pricelist/data/get_pricelist/'; //hardcoded api link to old database :D
-    var priv;
-    axios.get(url)
-    .then(ax => {
-
-        //CLEAR DB BELOW
-
-        Model.remove({}, err =>{
-            if(err) {
-                console.log(err);
-            }
-        });
-        Price.remove({}, err =>{
-            if(err) {
-                console.log(err);
-            }
-        });
-        PricePart.remove({}, err =>{
-            if(err) {
-                console.log(err);
-            }
-        });
-
-        var objectsData = {};
-        ax.data.forEach(repair => {
-            repair.name = repair.part;
-            var saveTo = repair.model;
-            delete repair.part;
-            delete repair.model;
-            delete repair.id;
-            if(!(saveTo in objectsData)){
-                objectsData[saveTo] = [];
-                Model.create({model: saveTo, name: "Samsung"});
-            }
-            if(repair.parts){
-                repair.parts.forEach(part => {
-                    Part.findOne({part: part.part}, (err, resPart) => {
-                        if(err || !resPart) {
-                            Part.create({part: part.part, description: part.description, cost: part.cost});
-                        }
-                    });
-                });
-            }
-            Model.findOne({model: saveTo}, (err, resModel) =>{
-                if(err || !resModel){
-                    console.log(err);
-                } else {
-                    Price.create({name: repair.name, labour: repair.labour, second: repair.second, min: repair.min}, (err, resPrice) =>{
-                        if(err){
-                            console.log(err);
-                        }
-                        else {
-                            resModel.prices.push(resPrice);
-                            resModel.save();
-                            if(repair.parts){
-                                repair.parts.forEach(part =>{
-                                    Part.findOne({
-                                        part: part.part}, (err, resPart) => {
-                                            PricePart.create({amount: part.amount, part: resPart}, (err, resPricePart) => {
-                                                resPrice.parts.push(resPricePart);
-                                                resPrice.save();
-                                            });
-                                        }
-                                    );
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-            objectsData[saveTo].push(repair);
-        });
-        res.send(objectsData);    
-    })
-    .catch(function(err){
-        console.log("Error: " + err);
+    Model.find({}).populate({path: "prices", populate: {path: "parts.part"} }).exec((err, model) => {
+        if(err || !model){
+            console.log(err);
+        } else {
+            res.json(model);
+        }
     });
 });
 
@@ -101,7 +30,7 @@ router.get("/pricelist", function(req, res) {
 
 router.get("/users", middleware.isAdmin, function(req, res) {
     User.find({}, function(err, users){
-        if(err){
+        if(err || !users){
             console.log("Problems with getting users for admin/users: " + err);
             return res.redirect("back");
         }

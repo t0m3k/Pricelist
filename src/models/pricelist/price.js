@@ -7,8 +7,11 @@ var PriceSchema = mongoose.Schema({
     min: {type:Number, default: 50},
     parts: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "PricePart"
+            part:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Part"
+            },
+            amount: Number
         }
     ]
 });
