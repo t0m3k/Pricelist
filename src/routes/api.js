@@ -16,7 +16,7 @@ router.get("/", function(req, res) {
     res.send(priv);
 });
 
-router.get("/pricelist", function(req, res) {
+router.get("/pricelist", middleware.canRead, function(req, res) {
     Model.find({}).populate({path: "prices", populate: {path: "parts.part"} }).exec((err, model) => {
         if(err || !model){
             console.log(err);
@@ -26,7 +26,7 @@ router.get("/pricelist", function(req, res) {
     });
 });
 
-router.delete("/pricelist/:id", function(req, res) {
+router.delete("/pricelist/:id", middleware.canWrite, function(req, res) {
     Model.findById(req.params.id).populate({path: "prices"}).exec((err, model) => {
         if(err || !model){
             console.log(err);
@@ -45,7 +45,7 @@ router.delete("/pricelist/:id", function(req, res) {
     });
 });
 
-router.delete("/pricelist/:model/:price", function(req, res) {
+router.delete("/pricelist/:model/:price", middleware.canWrite, function(req, res) {
     Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
         if(err || !model){
             console.log(err);
@@ -92,20 +92,14 @@ router.put("/users/:id", middleware.isAdmin, function(req, res) {
     User.findById(req.params.id, function(err, user){
         if(err || !user){
             console.log("Problems with getting user for api/user: " + err);
-            return res.redirect("/admin/users");
+            return res.json({message: "couldn't edit user"});
         }
         var newU = req.body.user;
-        if("isAdmin" in newU) {
-            user.isAdmin = newU.isAdmin;
-        }
-        if("emailConf" in newU) {
-            user.emailConf = newU.emailConf;
-        }
-        if("read" in newU) {
-            user.read = newU.read;
-        }
-        if("write" in newU) {
-            user.write = newU.write;
+        var priv = ["isAdmin", "read", "write"]; // privileges that can be edited by admin
+        for(prop in newU){
+            if(priv.includes(prop)){
+                user[prop] = newU[prop];
+            };
         }
         User.findByIdAndUpdate(user._id, user, err =>{
             if(err){
