@@ -3,8 +3,8 @@ var express                 = require('express'),
     Part                    = require('../models/pricelist/part'),
     Price                   = require('../models/pricelist/Price'),
     User                    = require('../models/user'),
-    middleware              = require("../middleware"),
-    axios                   = require("axios");
+    middleware              = require("../middleware");
+    
 var router = express.Router({mergeParams: true});
 
 router.get("/", function(req, res) {
