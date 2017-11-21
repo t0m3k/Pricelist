@@ -3,8 +3,8 @@ var express                 = require('express'),
     Part                    = require('../models/pricelist/part'),
     Price                   = require('../models/pricelist/Price'),
     User                    = require('../models/user'),
-    middleware              = require("../middleware"),
-    axios                   = require("axios");
+    middleware              = require("../middleware");
+
 var router = express.Router({mergeParams: true});
 
 router.get("/", function(req, res) {
@@ -40,7 +40,7 @@ router.delete("/pricelist/:id", middleware.canWrite, function(req, res) {
                     console.log(err);
                 }
             });
-            res.send("Success!")
+            res.send("Success!");
         }
     });
 });
@@ -96,15 +96,15 @@ router.put("/users/:id", middleware.isAdmin, function(req, res) {
         }
         var newU = req.body.user;
         var priv = ["isAdmin", "read", "write"]; // privileges that can be edited by admin
-        for(prop in newU){
+        for(var prop in newU){
             if(priv.includes(prop)){
                 user[prop] = newU[prop];
-            };
+            }
         }
         User.findByIdAndUpdate(user._id, user, err =>{
             if(err){
                 console.log(err);
-                return res.json({message: "Couldn't save the user!"})
+                return res.json({message: "Couldn't save the user!"});
             }
             res.json(user);
         });
