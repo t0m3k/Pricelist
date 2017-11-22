@@ -43,7 +43,7 @@ function calcBasket() {
                 parts += parseFloat(cost);
                 console.log("First: " + price.labour);
             } else {
-                sum+= parseFloat(cost) + parseFloat(price.labour) * (parseFloat(price.second) / 100);
+                sum+= parseFloat(cost) + (parseFloat(price.labour) * (parseFloat(price.second) / 100));
                 min += parseFloat(cost) + (parseFloat(price.labour) * (parseFloat(price.second) / 100));                
                 parts += parseFloat(cost);
                 console.log("Next: " + price.labour);
