@@ -32,6 +32,7 @@ function getData(cb) {
                 cb();
             }
             loaded = true;
+            Main();
         });
 }
 
@@ -48,7 +49,7 @@ function getPart(partName, cb) {
             }
         }
     };
-    xmlhttp.open("POST", sql_getpart + partName, true);
+    xmlhttp.open("POST", "URL", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
 }

@@ -14,7 +14,6 @@ function addToBasket(id) {
 
 function removeFromBasket(id) {
     $('#' + id).removeClass("text-success");
-    var i = basket.indexOf(id);
     basket = basket.filter(item => {
         return item != id;
     });
