@@ -29,6 +29,11 @@ function getData(cb) {
             if(typeof cb === 'function'){
                 cb();
             }
+<<<<<<< HEAD
+=======
+            loaded = true;
+            Main();
+>>>>>>> de15749fa557c1762e8866d5eadc4aa8bd839dfb
         });
 }
 
@@ -45,7 +50,7 @@ function getPart(partName, cb) {
             }
         }
     };
-    xmlhttp.open("POST", sql_getpart + partName, true);
+    xmlhttp.open("POST", "URL", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send();
 }
