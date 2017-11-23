@@ -1,9 +1,8 @@
 var express                 = require('express'),
-    Model                   = require('../models/pricelist/model'),
-    Part                    = require('../models/pricelist/part'),
-    Price                   = require('../models/pricelist/Price'),
     User                    = require('../models/user'),
+    pricelist               = require('../controllers/pricelist'),
     middleware              = require("../middleware");
+
 var router = express.Router({mergeParams: true});
 
 router.get("/", function(req, res) {
@@ -15,53 +14,23 @@ router.get("/", function(req, res) {
     res.send(priv);
 });
 
-router.get("/pricelist", middleware.canRead, function(req, res) {
-    Model.find({}).populate({path: "prices", populate: {path: "parts.part"} }).exec((err, model) => {
-        if(err || !model){
-            console.log(err);
-        } else {
-            res.json(model);
-        }
-    });
-});
+router.route("/pricelist") 
+    .post(middleware.canWrite, pricelist.createModel)
+    .get(middleware.canRead, pricelist.getPricelist);
 
-router.delete("/pricelist/:id", middleware.canWrite, function(req, res) {
-    Model.findById(req.params.id).populate({path: "prices"}).exec((err, model) => {
-        if(err || !model){
-            console.log(err);
-        } else {
-            console.log("removing model");
-            model.prices.forEach(price => {
-                Price.findByIdAndRemove(price._id);
-            });
-            Model.findByIdAndRemove(req.params.id, err => {
-                if(err) {
-                    console.log(err);
-                }
-            });
-            res.send("Success!");
-        }
-    });
-});
+router.route("/parts") 
+    .get(middleware.canRead, pricelist.getParts);
 
-router.delete("/pricelist/:model/:price", middleware.canWrite, function(req, res) {
-    Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
-        if(err || !model){
-            console.log(err);
-        } else {
-            if(!model.prices.every(price => {
-                return price._id != req.params.price;
-            })){
-                model.prices = model.prices.filter(price => {
-                    return price._id != req.params.price;
-                });
-                model.save();
-                Price.findByIdAndRemove(req.params.price);
-                res.send("Success!");
-            }
-        }
-    });
-});
+
+router.route("/pricelist/:model")
+    .get(middleware.canRead, pricelist.getModel)
+    .put(middleware.canWrite, pricelist.updateModel)
+    .delete(middleware.canWrite, pricelist.deleteModel);
+
+router.route("/pricelist/:model/:price")
+    .get(middleware.canRead, pricelist.getPrice)
+    .delete(middleware.canWrite, pricelist.deletePrice);
+
 
 // all users
 
