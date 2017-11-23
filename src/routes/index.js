@@ -34,29 +34,33 @@ router.post("/register", function(req, res) {
         req.flash("error", "You are logged in!");
         return res.redirect("/");
     }
-    User.register(new User({
-        username: req.body.username,
-        nickname: req.body.nickname,
-        emailConf: false,
-        read: false,
-        write: false,
-        isAdmin: false
-        }),
-        req.body.password,
-        function(err, user){
-            if(err || !user) {
-                console.log(err);
-                console.log(user.nickname);
-                req.flash("error", err.message);
-                res.redirect("/register");
-            } else {
-                passport.authenticate("local")(req, res, function(){
-                    req.flash("success", "Signed in! Welcome, " + user.nickname);
-                    res.redirect("/");
-                });
+    if(req.body.username && req.body.nickname && req.body.password){
+        User.register(new User({
+            username: req.body.username,
+            nickname: req.body.nickname,
+            emailConf: false,
+            read: false,
+            write: false,
+            isAdmin: false
+            }),
+            req.body.password,
+            function(err, user){
+                if(err || !user) {
+                    req.flash("error", err.message);
+                    res.redirect("/register");
+                } else {
+                    passport.authenticate("local")(req, res, function(){
+                        req.flash("success", "Signed in! Welcome, " + user.nickname);
+                        res.redirect("/");
+                    });
+                }
             }
-        }
-    );
+        );
+    }
+    else {
+        req.flash("error", "Missing field!");
+        res.redirect("/register");
+    }
 });
 
 router.get("/logout", function(req, res) {
