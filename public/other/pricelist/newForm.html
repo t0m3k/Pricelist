@@ -3,51 +3,51 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form id="formElement">
-                <div class="form-group row">
-                    <label class="col-2 col-form-label" for="part">Part:</label>
-                    <div class="col">
-                    <input type="text" class="form-control" id="part">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-9 col-form-label" for="labour">Labour:</label>
-                    <div class="col">
-                    <input type="number" step="0.01" min="0" class="form-control" id="labour">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-9 col-form-label" for="second">Labour % if second:</label>
-                    <div class="col">
-                    <input type="number" step="1" min="0" value="15" class="form-control" id="second">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-9 col-form-label" for="minPercentage">Min labour %:</label>
-                    <div class="col">
-                    <input type="number" step="1" min="0" value="50" class="form-control" id="minPercentage">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                    <div class="col-9">
-                        <label class="col-form-label-sm" for="partNumber">Add part:</label>
-                        <input type="text" class="form-control form-control-sm" id="partNumber">
-                        <div class="invalid-feedback">
-                        Please provide a valid part number.
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label" for="part">Part:</label>
+                        <div class="col">
+                        <input type="text" class="form-control" id="part">
                         </div>
                     </div>
-                    <div class="col-3">
-                        <label class="col-form-label-sm" for="partAmount">QTy:</label>
-                        <input type="number" step="1" min="0" value="1" class="form-control form-control-sm" id="partAmount">
+                    <div class="form-group row">
+                        <label class="col-9 col-form-label" for="labour">Labour:</label>
+                        <div class="col">
+                        <input type="number" step="0.01" min="0" class="form-control" id="labour">
+                        </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-9 col-form-label" for="second">Labour % if second:</label>
+                        <div class="col">
+                        <input type="number" step="1" min="0" value="15" class="form-control" id="second">
+                        </div>
                     </div>
-                    <a href="javascript:;" id="addPartButton" class="btn btn-secondary btn-sm top-buffer">Add</a>
-                </div>
-                <div class="form-group hidden" id="partsDiv">
-                </div>
-                <input type="hidden" name="editId" id="editId" readonly>
-                <input type="hidden" name="localId" id="localId" readonly>
-                <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="form-group row">
+                        <label class="col-9 col-form-label" for="minPercentage">Min labour %:</label>
+                        <div class="col">
+                        <input type="number" step="1" min="0" value="50" class="form-control" id="minPercentage">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                        <div class="col-9">
+                            <label class="col-form-label-sm" for="partNumber">Add part:</label>
+                            <input type="text" class="form-control form-control-sm" id="partNumber">
+                            <div class="invalid-feedback">
+                            Please provide a valid part number.
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label class="col-form-label-sm" for="partAmount">QTy:</label>
+                            <input type="number" step="1" min="0" value="1" class="form-control form-control-sm" id="partAmount">
+                        </div>
+                        </div>
+                        <a href="javascript:;" id="addPartButton" class="btn btn-secondary btn-sm top-buffer">Add</a>
+                    </div>
+                    <div class="form-group hidden" id="partsDiv">
+                    </div>
+                    <input type="hidden" name="partId" id="partId" readonly>
+                    <input type="hidden" name="modelId" id="modelId" readonly>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
