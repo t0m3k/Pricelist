@@ -16,28 +16,28 @@ $("#partForm").submit(function (e) {
 });
 
 
-// updates add/edit form with element that will be edited or dataholder if adding new element
-function editPrice(modelId, priceId) {
-    clearAddForm(); // clears form and all tmp data
-    var model = mainData.find(model => {
-        return model._id == modelId;
-    });
-    console.log(model);
-    var part = model.prices.find(price => {
-        return price._id == priceId;
-    });
-    console.log(part);
-    $("#localId").val(priceId);
-    $("#part").val(part.name);
-    $("#labour").val(part.labour);
-    $("#minPercentage").val(part.min);
-    $("#second").val(part.second);
-    if (part.parts) {
-        listParts(part.parts);
+// // updates add/edit form with element that will be edited or dataholder if adding new element
+// function editPrice(modelId, priceId) {
+//     clearAddForm(); // clears form and all tmp data
+//     var model = mainData.find(model => {
+//         return model._id == modelId;
+//     });
+//     console.log(model);
+//     var part = model.prices.find(price => {
+//         return price._id == priceId;
+//     });
+//     console.log(part);
+//     $("#localId").val(priceId);
+//     $("#part").val(part.name);
+//     $("#labour").val(part.labour);
+//     $("#minPercentage").val(part.min);
+//     $("#second").val(part.second);
+//     if (part.parts) {
+//         listParts(part.parts);
         
-        console.log("Editing item id: " + part._id);
-    }
-}
+//         console.log("Editing item id: " + part._id);
+//     }
+// }
 
 // updates element in mainData with infro from form
 function updateFromForm() {
