@@ -3,7 +3,6 @@ var basket = [];
 
 var objectsData = [];
 
-var loaded = false;
 
 // It'll run when all data is retrieved frim databse and table is fully drawn.
 function Main() {
@@ -21,7 +20,6 @@ $(document).ready(function () {
 
 // get data and draw table
 function getData(cb) {
-    loaded = false;
     $("table").html('<div class="spinner"></div><h1 class="text-center">LOADING...</h1>'); 
     var url = urlAdd($(location).attr('origin'), 'api/pricelist')
     $.get(url)
@@ -31,7 +29,6 @@ function getData(cb) {
             if(typeof cb === 'function'){
                 cb();
             }
-            loaded = true;
         });
 }
 

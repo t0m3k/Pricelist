@@ -33,7 +33,7 @@ $("#searchclear").click(function () {
 });
 
 function refreshTable() {
-    jsonFromPhp();
+    getData();
     basket = [];
     calcBasket();
     $("#searchBox").val("");
