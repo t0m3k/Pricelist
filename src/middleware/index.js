@@ -1,46 +1,45 @@
  
- var middlewareObj = {};
-
- middlewareObj.isLoggedIn = function(req, res, next) {
+ exports.isLoggedIn = function(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
     }
-    req.flash("error", "Please login first!");
-    res.redirect("/login");
+    exports.message(req, res, "You need to login first!", "/login");
 }; 
 
-middlewareObj.isAdmin = function(req, res, next) {
-    middlewareObj.isLoggedIn(req, res, function(){
+exports.isAdmin = function(req, res, next) {
+    exports.isLoggedIn(req, res, function(){
         if(req.user.isAdmin === true) {
             return next();
         }
-        req.json({message: "You don't have permission to do that!"});
+        exports.message(req, res, "You don't have permission to do that!", "/");
     });
 }; 
 
-middlewareObj.canRead = function(req, res, next) {
-    middlewareObj.isLoggedIn(req, res, function(){
+exports.canRead = function(req, res, next) {
+    exports.isLoggedIn(req, res, function(){
         if(req.user.read === true) {
             return next();
         }
-        req.json({message: "You don't have permission to do that!"});
+        exports.message(req, res, "You don't have permission to do that!", "/");
     });
 }; 
 
-middlewareObj.canWrite = function(req, res, next) {
-    middlewareObj.isLoggedInJSON(req, res, function(){
+exports.canWrite = function(req, res, next) {
+    exports.isLoggedIn(req, res, function(){
         if(req.user.write === true) {
             return next();
         }
-        req.json({message: "You don't have permission to do that!"});
+        exports.message(req, res, "You don't have permission to do that!", "/");
     });
 }; 
 
-middlewareObj.isLoggedInJSON = function(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
+exports.message = function(req, res, message = "There was an error", red = "/") {
+    if(req.originalUrl.slice(1,4) === "api"){
+        res.json({message: message});
+    } else {
+        req.flash("error", message);
+        res.redirect(red);
     }
-    res.send({message: "You need to log in first!"});
-};
+}
 
- module.exports = middlewareObj;
+ module.exports = exports;
