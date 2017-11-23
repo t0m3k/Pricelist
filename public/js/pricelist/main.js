@@ -29,11 +29,6 @@ function getData(cb) {
             if(typeof cb === 'function'){
                 cb();
             }
-<<<<<<< HEAD
-=======
-            loaded = true;
-            Main();
->>>>>>> de15749fa557c1762e8866d5eadc4aa8bd839dfb
         });
 }
 
