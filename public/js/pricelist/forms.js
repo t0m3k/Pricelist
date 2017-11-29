@@ -31,7 +31,6 @@ function clearAddForm() {
     $("#editId").val('');
     $("#localId").val('');
     $("#formElement").trigger("reset");
-    parts_tmp = [];
     $('#partsDiv').addClass('hidden').html('');
     
     $("#partNumber").removeClass("is-invalid");

@@ -50,12 +50,13 @@ function addEditPrice() {
         editPrice(modelId, priceId);
     });
 }
+
 function editPrice(modelId, priceId) {
     $.get("/other/pricelist/newForm.html")
     .done(form => {
         var model = mainData.find(model => model._id === modelId);
         var part = model.prices.find(price => price._id === priceId);
-        $('#editPriceContainer').html('').append(form);
+        $('#editFormContainer').html('').append(form);
         $("#partId").val(priceId);
         $("#modelId").val(modelId);
         $("#part").val(part.name);
@@ -75,7 +76,7 @@ function editPrice(modelId, priceId) {
 function listParts(parts) {
     var parts_html = '<div><label for="parts">Parts:</label></div>';
     parts.forEach((part) => {
-        parts_html += '<div class="row mt-3"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
+        parts_html += '<div class="row mt-2"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
         parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
         parts_html +=   '<div class="row"><div class="col-9">' +
                             '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.description + '">' +
@@ -85,7 +86,7 @@ function listParts(parts) {
                         '</div></div>';
     });
     
-    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer" onclick="removeParts()">Remove parts</a>';
+    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer mt-1" onclick="removeParts()">Remove parts</a>';
     $('#partsDiv').removeClass('hidden').html(parts_html);
 }
 
@@ -101,6 +102,33 @@ function addDeletePrice() {
         var modelId = $(this).parents('.card-body').find('.model-item').attr('id');
         removePrice(modelId, myId);
     });
+}
+
+function editModel(modelId) {
+    $.get("/other/pricelist/modelForm.html")
+    .done(form => {
+        var model = mainData.find(model => model._id === modelId);
+        $('#editFormContainer').html('').append(form);
+        $("#model").val(model.model);
+        $("#partId").val(model.name);
+        $("#modelId").val(modelId);
+        $('#editModelModal').modal('show');
+
+        $("#modelForm").submit(function (e) {
+            e.preventDefault();
+            // TODO - some data validation
+        
+            //take id from hidden id field
+            var id = modelId;
+            updateFromForm();
+            if(id == dataholder) {
+                dataholder = -1;
+            }
+            editPriceRow(id);
+            clearAddForm();
+            parent.$.fancybox.close();
+        });
+    })
 }
 
 function removeModel(model) {
