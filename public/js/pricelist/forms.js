@@ -15,40 +15,16 @@ $("#partForm").submit(function (e) {
     parent.$.fancybox.close();
 });
 
-
-// // updates add/edit form with element that will be edited or dataholder if adding new element
-// function editPrice(modelId, priceId) {
-//     clearAddForm(); // clears form and all tmp data
-//     var model = mainData.find(model => {
-//         return model._id == modelId;
-//     });
-//     console.log(model);
-//     var part = model.prices.find(price => {
-//         return price._id == priceId;
-//     });
-//     console.log(part);
-//     $("#localId").val(priceId);
-//     $("#part").val(part.name);
-//     $("#labour").val(part.labour);
-//     $("#minPercentage").val(part.min);
-//     $("#second").val(part.second);
-//     if (part.parts) {
-//         listParts(part.parts);
-        
-//         console.log("Editing item id: " + part._id);
-//     }
+// // updates element in mainData with infro from form
+// function updateFromForm() {
+//     var id = $("#localId").val();
+//     mainData[id].model = $("#model").val();
+//     mainData[id].part = $("#part").val();
+//     mainData[id].labour = $("#labour").val();
+//     mainData[id].min = $("#minPercentage").val();
+//     mainData[id].second = $("#second").val();
+//     mainData[id].parts = parts_tmp;
 // }
-
-// updates element in mainData with infro from form
-function updateFromForm() {
-    var id = $("#localId").val();
-    mainData[id].model = $("#model").val();
-    mainData[id].part = $("#part").val();
-    mainData[id].labour = $("#labour").val();
-    mainData[id].min = $("#minPercentage").val();
-    mainData[id].second = $("#second").val();
-    mainData[id].parts = parts_tmp;
-}
 
 // clears add/edit form
 function clearAddForm() {
@@ -61,32 +37,13 @@ function clearAddForm() {
     $("#partNumber").removeClass("is-invalid");
 }
 
+<<<<<<< HEAD
 // add parts button
+=======
 
-function listParts(parts) {
-    var parts_html = '<div><label for="parts">Parts:</label></div>';
-    parts.forEach((part) => {
-        parts_html += '<div class="row mt-3"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
-        parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
-        parts_html +=   '<div class="row"><div class="col-9">' +
-                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.description + '">' +
-                        '</div>' +
-                        '<div class="col">' +
-                        '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.part.cost * 1.2).toFixed(2) + '">' +
-                        '</div></div>';
-    }, this);
-    
-    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer" onclick="removeParts()">Remove parts</a>';
-    $('#partsDiv').removeClass('hidden').html(parts_html);
-}
+>>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
 
-function removeParts() {
-    console.log("Removing all parts");
-    $("#partNumber").val('');
-    $("#partAmount").val('1');
-    $('#partsDiv').addClass('hidden');
-    parts_tmp = [];
-}
+
 
 function editPriceRow(row) {
     var data = JSON.stringify(mainData[row]);

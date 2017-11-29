@@ -71,6 +71,24 @@ function editPrice(modelId, priceId) {
     })
 }
 
+
+function listParts(parts) {
+    var parts_html = '<div><label for="parts">Parts:</label></div>';
+    parts.forEach((part) => {
+        parts_html += '<div class="row mt-3"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
+        parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
+        parts_html +=   '<div class="row"><div class="col-9">' +
+                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.description + '">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.part.cost * 1.2).toFixed(2) + '">' +
+                        '</div></div>';
+    });
+    
+    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer" onclick="removeParts()">Remove parts</a>';
+    $('#partsDiv').removeClass('hidden').html(parts_html);
+}
+
 function addDeletePrice() {
     // add delete icon to every price item
     $(".price-item").each(function(){
@@ -107,7 +125,19 @@ function removePrice(model, price) {
     });
 }
 
+<<<<<<< HEAD
 
+=======
+function removeParts() {
+    console.log("Removing all parts");
+    $("#partNumber").val('');
+    $("#partAmount").val('1');
+    $('#partsDiv').addClass('hidden');
+    
+}
+
+// add parts button
+>>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
 $("#addPartButton").click(function () {
     // runs getPart function that will confirm if part is genuine 
     getPart($("#partNumber").val(), function (newPart) {
@@ -134,6 +164,7 @@ $("#addPartButton").click(function () {
         }
     });
 });
+<<<<<<< HEAD
 
 // function that wil check if part with partName exist and then run function cb with part object named partName
 function getPart(partName, cb) {
@@ -144,3 +175,5 @@ function getPart(partName, cb) {
                 } else
                     cb(false);
 }
+=======
+>>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
