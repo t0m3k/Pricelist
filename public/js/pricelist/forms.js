@@ -62,32 +62,6 @@ function clearAddForm() {
 }
 
 // add parts button
-$("#addPartButton").click(function () {
-    // runs getPart function that will confirm if part is genuine 
-    getPart($("#partNumber").val(), function (newPart) {
-        var amount = $("#partAmount").val();
-        $("#partNumber").removeClass("is-invalid");
-        
-        if (newPart) { // check if part was returned
-            parts_tmp.push({
-                part:  newPart.part,
-                amount: amount,
-                description: newPart.description,
-                cost: newPart.cost
-            });
-            
-            // add part to parts_tmp, they'll be saved to database when form is successfully submitted
-            listParts(parts_tmp);
-
-            //after part is successfuly added clear add part fields
-            $("#partNumber").val('');
-            $("#partAmount").val('1');
-        } else {
-            $("#partNumber").addClass("is-invalid");
-            console.log("Couldn't find part number, check: " + sql_getpart);
-        }
-    });
-});
 
 function listParts(parts) {
     var parts_html = '<div><label for="parts">Parts:</label></div>';

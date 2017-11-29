@@ -106,3 +106,41 @@ function removePrice(model, price) {
             showPopUp("Success!", "Your changes have been saved.", 1500);
     });
 }
+
+
+$("#addPartButton").click(function () {
+    // runs getPart function that will confirm if part is genuine 
+    getPart($("#partNumber").val(), function (newPart) {
+        var amount = $("#partAmount").val();
+        $("#partNumber").removeClass("is-invalid");
+        
+        if (newPart) { // check if part was returned
+            parts_tmp.push({
+                part:  newPart.part,
+                amount: amount,
+                description: newPart.description,
+                cost: newPart.cost
+            });
+            
+            // add part to parts_tmp, they'll be saved to database when form is successfully submitted
+            listParts(parts_tmp);
+
+            //after part is successfuly added clear add part fields
+            $("#partNumber").val('');
+            $("#partAmount").val('1');
+        } else {
+            $("#partNumber").addClass("is-invalid");
+            console.log("Couldn't find part number, check: " + sql_getpart);
+        }
+    });
+});
+
+// function that wil check if part with partName exist and then run function cb with part object named partName
+function getPart(partName, cb) {
+    var url = urlAdd($(location).attr('origin'), 'api/pricelist')
+    $.getJSON()
+                if(this.responseText) {
+                    cb(JSON.parse(this.responseText));
+                } else
+                    cb(false);
+}
