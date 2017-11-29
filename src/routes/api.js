@@ -18,16 +18,19 @@ router.route("/pricelist")
     .post(middleware.canWrite, pricelist.createModel)
     .get(middleware.canRead, pricelist.getPricelist);
 
-router.route("/parts") 
+router.route("/pricelist/parts") 
     .get(middleware.canRead, pricelist.getParts);
 
+router.route("/pricelist/parts/:part") 
+    .get(middleware.canRead, pricelist.getPart);
 
-router.route("/pricelist/:model")
+
+router.route("/pricelist/models/:model")
     .get(middleware.canRead, pricelist.getModel)
     .put(middleware.canWrite, pricelist.updateModel)
     .delete(middleware.canWrite, pricelist.deleteModel);
 
-router.route("/pricelist/:model/:price")
+router.route("/pricelist/models/:model/:price")
     .get(middleware.canRead, pricelist.getPrice)
     .delete(middleware.canWrite, pricelist.deletePrice);
 
