@@ -37,11 +37,6 @@ function clearAddForm() {
     $("#partNumber").removeClass("is-invalid");
 }
 
-<<<<<<< HEAD
-// add parts button
-=======
-
->>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
 
 
 

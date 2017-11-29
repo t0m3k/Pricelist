@@ -125,9 +125,6 @@ function removePrice(model, price) {
     });
 }
 
-<<<<<<< HEAD
-
-=======
 function removeParts() {
     console.log("Removing all parts");
     $("#partNumber").val('');
@@ -137,7 +134,6 @@ function removeParts() {
 }
 
 // add parts button
->>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
 $("#addPartButton").click(function () {
     // runs getPart function that will confirm if part is genuine 
     getPart($("#partNumber").val(), function (newPart) {
@@ -164,7 +160,6 @@ $("#addPartButton").click(function () {
         }
     });
 });
-<<<<<<< HEAD
 
 // function that wil check if part with partName exist and then run function cb with part object named partName
 function getPart(partName, cb) {
@@ -175,5 +170,3 @@ function getPart(partName, cb) {
                 } else
                     cb(false);
 }
-=======
->>>>>>> 93fafd913c185ad294bfddc060719b8e91053e23
