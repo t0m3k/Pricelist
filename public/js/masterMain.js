@@ -14,5 +14,5 @@ function showPopUp(title, body, timeout) {
 }
 
 function urlAdd(first, second) {
-    return first[first.length - 1] == '/' ? first + second : first + '/' + second;
+    return first[first.length - 1] === '/' ? first + second : first + '/' + second;
 }
