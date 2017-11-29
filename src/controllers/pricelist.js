@@ -23,6 +23,15 @@ exports.getParts = function(req, res) {
     });
 }
 
+exports.getPart = function(req, res) {
+    Part.findOne({part: req.params.part}, (err, part) => {
+        if(err || !part) {
+            console.log(err);
+        }
+        res.json(part);
+    });
+}
+
 exports.createModel = function(req, res) {
     Model.create(req.body, (err, model) => {
         if(err || !model){
