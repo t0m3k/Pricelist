@@ -32,23 +32,7 @@ function getData(cb) {
         });
 }
 
-// function that wil check if part with partName exist and then run function cb with part object named partName
-function getPart(partName, cb) {
-    xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            if( typeof cb === 'function'){
-                if(this.responseText) {
-                    cb(JSON.parse(this.responseText));
-                } else
-                    cb(false);
-            }
-        }
-    };
-    xmlhttp.open("POST", "URL", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send();
-}
+
 
 function addWrite() {
 
