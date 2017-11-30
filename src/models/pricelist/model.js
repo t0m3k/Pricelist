@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var ModelSchema = mongoose.Schema({
-    model: String,
+    _id: String,
     name: String,
     prices: [
     {
