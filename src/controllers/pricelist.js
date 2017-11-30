@@ -195,7 +195,6 @@ exports.createPrice = function(req, res) {
                                 }
                             }));
                         });
-
                         Promise.all(promise).then(function(){ // when all promises for Part.findById are resolved and every part is pushed to price we will save price
                             price.save()
                         });
