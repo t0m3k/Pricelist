@@ -15,7 +15,6 @@ router.get("/", function(req, res) {
 });
 
 router.route("/pricelist") 
-    .post(middleware.canWrite, pricelist.createModel)
     .get(middleware.canRead, pricelist.getPricelist);
 
 router.route("/pricelist/parts") 
@@ -24,10 +23,15 @@ router.route("/pricelist/parts")
 router.route("/pricelist/parts/:part") 
     .get(middleware.canRead, pricelist.getPart);
 
+router.route("/pricelist/models")
+    .get(middleware.canRead, pricelist.getModels)
+    .post(middleware.canWrite, pricelist.createModel);
+
 
 router.route("/pricelist/models/:model")
     .get(middleware.canRead, pricelist.getModel)
     .put(middleware.canWrite, pricelist.updateModel)
+    .post(middleware.canWrite, pricelist.createPrice)
     .delete(middleware.canWrite, pricelist.deleteModel);
 
 router.route("/pricelist/models/:model/:price")

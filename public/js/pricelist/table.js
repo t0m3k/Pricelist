@@ -15,7 +15,7 @@ function drawTable() {
             if(!model.name) {
                 model.name = 'Samsung';
             }
-            var header = `<div class="col-xl-4 col-md-6 mt-4"><div class="card"><div class="card-body"><h4 id="${model._id}" class="card-title model-item">${ model.model }</h4><p class="mb-2 text-muted card-subtitle">${ model.name }</p><ul class="list-group list-group-flush">`;
+            var header = `<div class="col-xl-4 col-md-6 mt-4"><div class="card"><div class="card-body"><h4 id="${model._id}" class="card-title model-item">${ model._id }</h4><p class="mb-2 text-muted card-subtitle">${ model.name }</p><ul class="list-group list-group-flush">`;
 
             var lines = '';
             model.prices.forEach(price => {

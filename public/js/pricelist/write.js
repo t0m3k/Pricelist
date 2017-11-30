@@ -51,45 +51,6 @@ function addEditPrice() {
     });
 }
 
-function editPrice(modelId, priceId) {
-    $.get("/other/pricelist/newForm.html")
-    .done(form => {
-        var model = mainData.find(model => model._id === modelId);
-        var part = model.prices.find(price => price._id === priceId);
-        $('#editFormContainer').html('').append(form);
-        $("#partId").val(priceId);
-        $("#modelId").val(modelId);
-        $("#part").val(part.name);
-        $("#labour").val(part.labour);
-        $("#minPercentage").val(part.min);
-        $("#second").val(part.second);
-        if(part.parts) {
-            listParts(part.parts);
-            
-            console.log("Editing item id: " + part._id);
-        }
-        $('#editPriceModal').modal('show');
-    })
-}
-
-
-function listParts(parts) {
-    var parts_html = '<div><label for="parts">Parts:</label></div>';
-    parts.forEach((part) => {
-        parts_html += '<div class="row mt-2"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.part + '"></div>';
-        parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
-        parts_html +=   '<div class="row"><div class="col-9">' +
-                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.part.description + '">' +
-                        '</div>' +
-                        '<div class="col">' +
-                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.part.cost * 1.2).toFixed(2) + '">' +
-                        '</div></div>';
-    });
-    
-    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer mt-1" onclick="removeParts()">Remove parts</a>';
-    $('#partsDiv').removeClass('hidden').html(parts_html);
-}
-
 function addDeletePrice() {
     // add delete icon to every price item
     $(".price-item").each(function(){
@@ -104,14 +65,119 @@ function addDeletePrice() {
     });
 }
 
-function editModel(modelId) {
-    $.get("/other/pricelist/modelForm.html")
+function editPrice(modelId, priceId) {
+    $.get("/other/pricelist/newForm.html")
+    .done(form => {
+        var model = mainData.find(model => model._id === modelId);
+        var part = model.prices.find(price => price._id === priceId);
+        $('#editFormContainer').html('').append(form);
+        $("#partId").val(priceId);
+        $("#modelId").val(modelId);
+        $("#part").val(part.name);
+        $("#labour").val(part.labour);
+        $("#minPercentage").val(part.min);
+        $("#second").val(part.second);
+        if(part.parts) {
+            listParts(part.parts);
+        }
+        $('#editPriceModal').modal('show');
+    })
+}
+
+function addPrice(modelId) {
+    $.get("/other/pricelist/newForm.html")
     .done(form => {
         var model = mainData.find(model => model._id === modelId);
         $('#editFormContainer').html('').append(form);
-        $("#model").val(model.model);
-        $("#partId").val(model.name);
-        $("#modelId").val(modelId);
+        $('#editPriceModal').modal('show');
+        var price = {};
+        price.parts = [];
+
+        // add parts button
+        $("#addPartButton").click(function () {
+            // runs getPart function that will confirm if part is genuine 
+            getPart($("#partNumber").val(), function (newPart) {
+                var amount = $("#partAmount").val();
+                $("#partNumber").removeClass("is-invalid");
+                if (newPart) { // check if part was returned
+                    price.parts.push({
+                        _id:  newPart._id,
+                        amount: amount,
+                        description: newPart.description,
+                        cost: newPart.cost
+                    });
+                    
+                    console.log(price.parts);
+                    // add part to parts_tmp, they'll be saved to database when form is successfully submitted
+                    listParts(price.parts);
+
+                    //after part is successfuly added clear add part fields
+                    $("#partNumber").val('');
+                    $("#partAmount").val('1');
+                } else {
+                    $("#partNumber").addClass("is-invalid");
+                    console.log("Couldn't find part number");
+                }
+            });
+        });
+        $("#removePartsButton").click(function () {
+                    price.parts = [];
+                    removeParts();
+        });
+
+        $("#formElement").submit(function (e) {
+            e.preventDefault();
+            // TODO - some data validation
+        
+            //take id from hidden id field
+            $("#modelId").val();
+            price.name = $("#part").val();
+            price.labour = $("#labour").val();
+            price.min = $("#minPercentage").val();
+            price.second = $("#second").val();
+
+            var url = urlAdd($(location).attr('origin'), `api/pricelist/models/${model._id}`);
+            
+            console.log(url, price);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: price
+              })
+              .done(res => console.log(res));
+            parent.$.fancybox.close();
+        });
+    })
+}
+
+
+function listParts(parts) {
+    var parts_html = '<div><label for="parts">Parts:</label></div>';
+    parts.forEach((part) => {
+        if(part.part){
+            part._id = part.part._id;
+            part.description = part.part.description;
+            part.cost = part.part.cost
+        }
+    parts_html += '<div class="row mt-2"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part._id + '"></div>';
+        parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
+        parts_html +=   '<div class="row"><div class="col-9">' +
+                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.description + '">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.cost * 1.2).toFixed(2) + '">' +
+                        '</div></div>';
+    });
+    
+    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer mt-1" id="removePartsButton">Remove parts</a>';
+    $('#partsDiv').removeClass('hidden').html(parts_html);
+}
+
+$("#addModelButton").click(function (e) {
+    $.get("/other/pricelist/modelForm.html")
+    .done(form => {
+        $('#editFormContainer').html('').append(form);
         $('#editModelModal').modal('show');
 
         $("#modelForm").submit(function (e) {
@@ -119,35 +185,71 @@ function editModel(modelId) {
             // TODO - some data validation
         
             //take id from hidden id field
-            var id = modelId;
-            updateFromForm();
-            if(id == dataholder) {
-                dataholder = -1;
-            }
-            editPriceRow(id);
-            clearAddForm();
+            var model = {};
+            model._id = $("#model").val();
+            model.name = $("#description").val();
+
+            var url = urlAdd($(location).attr('origin'), `api/pricelist/models`);
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: model
+              })
+              .done(res => console.log(res));
+            parent.$.fancybox.close();
+        });
+    })
+});
+
+function editModel(modelId) {
+    $.get("/other/pricelist/modelForm.html")
+    .done(form => {
+        var model = mainData.find(model => model._id === modelId);
+        $('#editFormContainer').html('').append(form);
+        $("#model").val(model._id).prop('readonly', true);
+        $("#description").val(model.name);
+        $('#editModelModal').modal('show');
+
+        $("#modelForm").submit(function (e) {
+            e.preventDefault();        
+            //take id from hidden id field
+            var model = {};
+            model.name = $("#description").val();
+
+            var url = urlAdd($(location).attr('origin'), `api/pricelist/models/${model._id}`);
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: model,
+              })
+              .done(res => console.log(res));
             parent.$.fancybox.close();
         });
     })
 }
 
 function removeModel(model) {
-    var url = urlAdd($(location).attr('origin'), `api/pricelist/${ model }?_method=DELETE`);
+    var url = urlAdd($(location).attr('origin'), `api/pricelist/models/${ model }`);
     $.ajax({
-        type: "POST",
+        type: "DELETE",
         url: url,
-    }).done(function(res){
+    })
+    .done(function(res){
             getData();
             showPopUp("Success!", "Your changes have been saved.", 1500);
     });
 }
 
 function removePrice(model, price) {
-    var url = urlAdd($(location).attr('origin'), `api/pricelist/${ model }/${ price }?_method=DELETE`);
+    var url = urlAdd($(location).attr('origin'), `api/pricelist/models/${ model }/${ price }`);
+    console.log(url);
     $.ajax({
-        type: "POST",
+        type: "DELETE",
         url: url,
-    }).done(function(res){
+    })
+    .done(function(res){
             getData();
             showPopUp("Success!", "Your changes have been saved.", 1500);
     });
@@ -161,40 +263,16 @@ function removeParts() {
     
 }
 
-// add parts button
-$("#addPartButton").click(function () {
-    // runs getPart function that will confirm if part is genuine 
-    getPart($("#partNumber").val(), function (newPart) {
-        var amount = $("#partAmount").val();
-        $("#partNumber").removeClass("is-invalid");
-        
-        if (newPart) { // check if part was returned
-            parts_tmp.push({
-                part:  newPart.part,
-                amount: amount,
-                description: newPart.description,
-                cost: newPart.cost
-            });
-            
-            // add part to parts_tmp, they'll be saved to database when form is successfully submitted
-            listParts(parts_tmp);
 
-            //after part is successfuly added clear add part fields
-            $("#partNumber").val('');
-            $("#partAmount").val('1');
-        } else {
-            $("#partNumber").addClass("is-invalid");
-            console.log("Couldn't find part number, check: " + sql_getpart);
-        }
-    });
-});
 
 // function that wil check if part with partName exist and then run function cb with part object named partName
 function getPart(partName, cb) {
-    var url = urlAdd($(location).attr('origin'), 'api/pricelist')
-    $.getJSON()
-                if(this.responseText) {
-                    cb(JSON.parse(this.responseText));
-                } else
-                    cb(false);
+    var url = urlAdd($(location).attr('origin'), 'api/pricelist/parts/' + partName)
+    $.getJSON(url)
+    .done(result => {
+        if(result) {
+            cb(result);
+        } else
+            cb(false);
+    });
 }

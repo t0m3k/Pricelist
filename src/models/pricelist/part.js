@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var PartSchema = mongoose.Schema({
-    part: String,
+    _id: String,
     description: String,
     cost: String
 });
