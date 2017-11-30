@@ -69,18 +69,79 @@ function editPrice(modelId, priceId) {
     $.get("/other/pricelist/newForm.html")
     .done(form => {
         var model = mainData.find(model => model._id === modelId);
-        var part = model.prices.find(price => price._id === priceId);
+        var price = model.prices.find(price => price._id === priceId);
         $('#editFormContainer').html('').append(form);
-        $("#partId").val(priceId);
-        $("#modelId").val(modelId);
-        $("#part").val(part.name);
-        $("#labour").val(part.labour);
-        $("#minPercentage").val(part.min);
-        $("#second").val(part.second);
-        if(part.parts) {
-            listParts(part.parts);
+        $("#part").val(price.name);
+        $("#labour").val(price.labour);
+        $("#minPercentage").val(price.min);
+        $("#second").val(price.second);
+        if(price.parts) {
+            listParts(price.parts);
         }
         $('#editPriceModal').modal('show');
+
+        // add parts button
+        $("#addPartButton").click(function () {
+            // runs getPart function that will confirm if part is genuine 
+            getPart($("#partNumber").val(), function (newPart) {
+                var amount = $("#partAmount").val();
+                $("#partNumber").removeClass("is-invalid");
+                if (newPart) { // check if part was returned
+                    price.parts.push({
+                        _id:  newPart._id,
+                        amount: amount,
+                        description: newPart.description,
+                        cost: newPart.cost
+                    });
+                    
+                    console.log(price.parts);
+                    // add part to parts_tmp, they'll be saved to database when form is successfully submitted
+                    listParts(price.parts);
+
+                    //after part is successfuly added clear add part fields
+                    $("#partNumber").val('');
+                    $("#partAmount").val('1');
+                } else {
+                    $("#partNumber").addClass("is-invalid");
+                    console.log("Couldn't find part number");
+                }
+            });
+        });
+
+        $("#removePartsButton").click(function () {
+                    price.parts = [];
+                    removeParts();
+        });
+
+        $("#formElement").submit(function (e) {
+            e.preventDefault();
+            // TODO - some data validation
+        
+            //take id from hidden id field
+            $("#modelId").val();
+            price.name = $("#part").val();
+            price.labour = $("#labour").val();
+            price.min = $("#minPercentage").val();
+            price.second = $("#second").val();
+
+            var url = urlAdd($(location).attr('origin'), `api/pricelist/models/${ model._id }/${ price._id }`);
+            
+            console.log(url, price);
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: price
+              })
+              .done(res => {
+                  console.log(res);
+                  refreshTable();
+                });
+
+            $('#editPriceModal').modal('hide');
+        });
+
+
     })
 }
 
@@ -120,6 +181,7 @@ function addPrice(modelId) {
                 }
             });
         });
+
         $("#removePartsButton").click(function () {
                     price.parts = [];
                     removeParts();
@@ -145,8 +207,12 @@ function addPrice(modelId) {
                 url: url,
                 data: price
               })
-              .done(res => console.log(res));
-            parent.$.fancybox.close();
+              .done(res => {
+                  console.log(res);
+                  refreshTable();
+                });
+
+            $('#editPriceModal').modal('hide');
         });
     })
 }
@@ -169,8 +235,6 @@ function listParts(parts) {
                             '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.cost * 1.2).toFixed(2) + '">' +
                         '</div></div>';
     });
-    
-    parts_html += '<a href="javascript:;" class="btn btn-danger btn-sm top-buffer mt-1" id="removePartsButton">Remove parts</a>';
     $('#partsDiv').removeClass('hidden').html(parts_html);
 }
 

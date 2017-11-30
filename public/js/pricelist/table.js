@@ -8,7 +8,7 @@ function drawTable() {
     var filter = $('#searchBox').val(); // filter from searchbox    
     $('#tableDiv').html('');
     mainData.sort((a, b) => {
-        return a.model.localeCompare(b.model);
+        return a._id.localeCompare(b._id);
     })
     mainData.forEach(model => {
         if(((filter == null || filter == "") || model.model.toUpperCase().includes(filter.toUpperCase()))){

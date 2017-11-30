@@ -34,6 +34,28 @@ exports.getPart = function(req, res) {
     });
 }
 
+exports.createPart = function(req, res) {
+    Part.create(req.body, (err, part) => {
+        if(err || !part) {
+            var errmessage = err ? err.message : "Error!";
+            message(req, res, errmessage, "/");            
+        } else {
+            res.json(part);
+        }
+    });
+}
+
+exports.updatePart = function(req, res) {
+    Part.findByIdAndUpdate(req.params.part, req.body, {new: true})
+    .then(function(part){
+        res.json(part);
+    })
+    .catch(function(err){
+        var errmessage = err ? err.message : "Error!";
+        message(req, res, errmessage, "/"); 
+    });
+}
+
 exports.createModel = function(req, res) {
     Model.create(req.body, (err, model) => {
         if(err || !model){
@@ -159,7 +181,7 @@ exports.createPrice = function(req, res) {
 
                     model.prices.push(price); // push created price to model and save it, this doesn't have to wait for price to be updated with parts
                     model.save();
-                    
+
 
                     if(parts) { //Check if we have any parts
                         var promise = []; // create array of promises to which primise for each found part will be saved
@@ -196,13 +218,37 @@ exports.getPrice = function(req, res) {
 };
 
 exports.updatePrice = function(req, res) {
-    Price.findById(req.params.price)
-    .then(function(price){
-        res.json(price);
-    })
-    .catch(function(err){
-        var errmessage = err ? err.message : "Error!";
-        message(req, res, errmessage, "/");  
+    var bodyPrice = req.body; // create bodyPrice Price element so it can be modified
+    var parts;
+
+    if(bodyPrice.parts) {
+        parts = bodyPrice.parts;    //\
+        delete bodyPrice.parts;     //  Move parts to seperate variable so Price.create won't throw an error and we can find and add them later to Price object.
+    }
+
+    Price.findByIdAndUpdate(bodyPrice._id, bodyPrice, (err, price) => {
+        if(err || !price) {
+            var errmessage = err ? err.message : "Error, empty element was returned!";
+            message(req, res, errmessage, "/");  
+        } else {
+            if(parts) { //Check if we have any parts
+                var promise = []; // create array of promises to which primise for each found part will be saved
+                parts.map(part => {                     
+                    promise.push(Part.findById(part._id, (err, foundPart) => { // add Part.findById for each part to promise 
+                            if(err || !part){
+                                var errmessage = err ? err.message : "Error, empty element was returned!";
+                                message(req, res, errmessage, "/"); 
+                            } else {    
+                            price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
+                        }
+                    }));
+                });
+
+                Promise.all(promise).then(function(){ // when all promises for Part.findById are resolved and every part is pushed to price we will save price
+                    price.save()
+                });
+            }
+        }
     });
 };
 

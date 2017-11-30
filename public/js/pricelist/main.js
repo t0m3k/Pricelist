@@ -1,8 +1,6 @@
 var mainData = [];
 var basket = [];
 
-var objectsData = [];
-
 
 // It'll run when all data is retrieved frim databse and table is fully drawn.
 function Main() {
@@ -32,7 +30,11 @@ function getData(cb) {
         });
 }
 
-
+function refreshTable() {
+    getData();
+    basket = [];
+    calcBasket();
+}
 
 function addWrite() {
 

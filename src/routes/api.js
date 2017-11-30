@@ -11,7 +11,7 @@ router.get("/", function(req, res) {
     priv.isAdmin = req.user ? req.user.isAdmin : false;
     priv.read = req.user ? req.user.read : false;
     priv.write = req.user ? req.user.write : false;
-    res.send(priv);
+    res.json(priv);
 });
 
 router.route("/pricelist") 
@@ -21,6 +21,8 @@ router.route("/pricelist/parts")
     .get(middleware.canRead, pricelist.getParts);
 
 router.route("/pricelist/parts/:part") 
+    .post(middleware.canWrite, pricelist.createPart)
+    .put(middleware.canWrite, pricelist.updatePart)
     .get(middleware.canRead, pricelist.getPart);
 
 router.route("/pricelist/models")
@@ -36,6 +38,7 @@ router.route("/pricelist/models/:model")
 
 router.route("/pricelist/models/:model/:price")
     .get(middleware.canRead, pricelist.getPrice)
+    .put(middleware.canWrite, pricelist.updatePrice)
     .delete(middleware.canWrite, pricelist.deletePrice);
 
 
