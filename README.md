@@ -1,4 +1,4 @@
-#WELCOME TO ePOS BY AURORA STUDIO
+#WELCOME TO ePOS BY AURORA STUDIO#
 
 1. Rename `_local_conf.js` to `local_conf.js`.
 2. Edit `local_conf.js` and change `host`, `port` and `mongoDB` to your values.
