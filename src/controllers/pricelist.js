@@ -26,8 +26,7 @@ exports.getParts = function(req, res) {
 exports.getPart = function(req, res) {
     Part.findOne({_id: req.params.part}, (err, part) => {
         if(err || !part) {
-            var errmessage = err ? err.message : "Error!";
-            message(req, res, errmessage, "/");            
+            res.json(null);        
         } else {
             res.json(part);
         }
@@ -193,12 +192,16 @@ exports.createPrice = function(req, res) {
                                     } else {    
                                     price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
                                 }
-                            }));
+                            }).exec());
                         });
                         Promise.all(promise).then(function(){ // when all promises for Part.findById are resolved and every part is pushed to price we will save price
-                            price.save()
+                            price.save();
+                            res.json(price);
                         });
-                    }
+                    } else {
+                        res.json(price);
+                    } 
+
                 }
             });
         }
@@ -221,38 +224,51 @@ exports.updatePrice = function(req, res) {
     var parts;
 
     if(bodyPrice.parts) {
-        parts = bodyPrice.parts;    //\
-        delete bodyPrice.parts;     //  Move parts to seperate variable so Price.create won't throw an error and we can find and add them later to Price object.
+        parts = bodyPrice.parts;    // Move parts to seperate variable so Price.create won't throw an error and we can find and add them later to Price object.
     }
 
-    Price.findByIdAndUpdate(bodyPrice._id, bodyPrice, (err, price) => {
-        if(err || !price) {
-            var errmessage = err ? err.message : "Error, empty element was returned!";
+    bodyPrice.parts = [];
+
+    Price.findByIdAndUpdate(bodyPrice._id, bodyPrice, {new: true})
+    .then((price) => {
+        if(!price) {
+            var errmessage = "Error, empty element was returned!";
             message(req, res, errmessage, "/");  
         } else {
             if(parts) { //Check if we have any parts
                 var promise = []; // create array of promises to which primise for each found part will be saved
-                parts.map(part => {                     
+                parts.map(part => {             
                     promise.push(Part.findById(part._id, (err, foundPart) => { // add Part.findById for each part to promise 
                             if(err || !part){
                                 var errmessage = err ? err.message : "Error, empty element was returned!";
                                 message(req, res, errmessage, "/"); 
-                            } else {    
-                            price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
+                            } else {
+                                console.log('Found part: ' + foundPart) // THIS SHOULD BE ALWAYS FIRST LOG IN CONSOLE
+                                price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
                         }
-                    }));
+                    }).exec());
                 });
-
-                Promise.all(promise).then(function(){ // when all promises for Part.findById are resolved and every part is pushed to price we will save price
+                Promise.all(promise)
+                .then(() => { // when all promises for Part.findById are resolved and every part is pushed to price we will save price
                     price.save()
-                });
-            }
+                    .then(() => {
+                        console.log('Saved price: ' + price); // THIS SHOULD BE LATER
+                        res.json(price);
+                    })
+                    .catch(err => {
+                        var errmessage = err ? err.message : "Error, empty element was returned!";
+                        message(req, res, errmessage, "/"); 
+                    });                  
+                })
+                .catch(err => console.log(err));
+            } else {
+                res.json(price);
+            } 
         }
     });
 };
 
 exports.deletePrice = function(req, res) {
-    console.log("delete price");
     Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
         if(err || !model){
             console.log(err);

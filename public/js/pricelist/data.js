@@ -35,6 +35,7 @@ function calcBasket() {
             $("#" + price._id).addClass('text-success');
             var cost = 0;
             price.parts.forEach(part => {
+                console.log(part);
                 cost += parseFloat(part.part.cost) * part.amount;
             });
             if(i===0){

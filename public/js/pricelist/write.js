@@ -93,8 +93,6 @@ function editPrice(modelId, priceId) {
                         description: newPart.description,
                         cost: newPart.cost
                     });
-                    
-                    console.log(price.parts);
                     // add part to parts_tmp, they'll be saved to database when form is successfully submitted
                     listParts(price.parts);
 
@@ -167,8 +165,6 @@ function addPrice(modelId) {
                         description: newPart.description,
                         cost: newPart.cost
                     });
-                    
-                    console.log(price.parts);
                     // add part to parts_tmp, they'll be saved to database when form is successfully submitted
                     listParts(price.parts);
 
@@ -260,8 +256,11 @@ $("#addModelButton").click(function (e) {
                 url: url,
                 data: model
               })
-              .done(res => console.log(res));
-            parent.$.fancybox.close();
+              .done(res => {
+                  console.log(res);
+                  refreshTable();
+                });
+                $('#editModelModal').modal('hide');
         });
     })
 });
@@ -288,8 +287,11 @@ function editModel(modelId) {
                 url: url,
                 data: model,
               })
-              .done(res => console.log(res));
-            parent.$.fancybox.close();
+              .done(res => {
+                  console.log(res);
+                  refreshTable();
+                });
+                $('#editModelModal').modal('hide');
         });
     })
 }
@@ -334,9 +336,6 @@ function getPart(partName, cb) {
     var url = urlAdd($(location).attr('origin'), 'api/pricelist/parts/' + partName)
     $.getJSON(url)
     .done(result => {
-        if(result) {
-            cb(result);
-        } else
-            cb(false);
+        cb(result);
     });
 }
