@@ -33,33 +33,44 @@ router.post("/register", function(req, res) {
     if(req.user){
         req.flash("error", "You are logged in!");
         return res.redirect("/");
-    }
-    if(req.body.username && req.body.nickname && req.body.password){
-        User.register(new User({
-            username: req.body.username,
-            nickname: req.body.nickname,
-            emailConf: false,
-            read: false,
-            write: false,
-            isAdmin: false
-            }),
-            req.body.password,
-            function(err, user){
-                if(err || !user) {
-                    req.flash("error", err.message);
-                    res.redirect("/register");
-                } else {
-                    passport.authenticate("local")(req, res, function(){
-                        req.flash("success", "Signed in! Welcome, " + user.nickname);
-                        res.redirect("/");
-                    });
-                }
+    } else {
+        var admin;
+        User.find({})
+        .then(users =>{
+            if(users.some(user => user.isAdmin)){
+                admin = false;
+            } else {
+                admin = true;
             }
-        );
-    }
-    else {
-        req.flash("error", "Missing field!");
-        res.redirect("/register");
+            if(req.body.username && req.body.nickname && req.body.password){
+                User.register(new User({
+                    username: req.body.username,
+                    nickname: req.body.nickname,
+                    emailConf: false,
+                    read: false,
+                    write: false,
+                    isAdmin: admin
+                    }),
+                    req.body.password,
+                    function(err, user){
+                        if(err || !user) {
+                            req.flash("error", err.message);
+                            res.redirect("/register");
+                        } else {
+                            passport.authenticate("local")(req, res, function(){
+                                req.flash("success", "Signed in! Welcome, " + user.nickname);
+                                res.redirect("/");
+                            });
+                        }
+                    }
+                );
+            }
+            else {
+                req.flash("error", "Missing field!");
+                res.redirect("/register");
+            }
+
+        });
     }
 });
 
