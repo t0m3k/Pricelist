@@ -40,22 +40,19 @@
     </div>
   </div>
   
-<% if(currentUser.write){ %>
-<div id="editFormContainer">
-  
-</div>
- <%  } %>
-  
-  <pre id="csv" class="hidden"></pre>
   <script src="/js/pricelist/table.js"></script>
   <script src="/js/pricelist/helpers.js"></script>
   <script src="/js/pricelist/data.js"></script>
   <script src="/js/pricelist/main.js"></script>
   <script src="/js/pricelist/style.js"></script>
-
+  
 <% if(currentUser.write){ %>
+<div id="editFormContainer">
+  
+</div>
+
   <script src="/js/pricelist/write.js"></script>
- <%  } %>
 
+<%  } %>
 
-  <% include partials/footer %>
+<% include partials/footer %>

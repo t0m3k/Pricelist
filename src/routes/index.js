@@ -37,10 +37,10 @@ router.post("/register", function(req, res) {
         var admin;
         User.find({})
         .then(users =>{
-            if(users.some(user => user.isAdmin)){
-                admin = false;
+            if(users.some(user => user.isAdmin)){ // if some of the users are admin
+                admin = false; // new user will not be admin
             } else {
-                admin = true;
+                admin = true; // else new user will be admin
             }
             if(req.body.username && req.body.nickname && req.body.password){
                 User.register(new User({
@@ -49,7 +49,7 @@ router.post("/register", function(req, res) {
                     emailConf: false,
                     read: false,
                     write: false,
-                    isAdmin: admin
+                    isAdmin: admin // admin part
                     }),
                     req.body.password,
                     function(err, user){

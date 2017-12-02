@@ -83,8 +83,9 @@ function editPrice(modelId, priceId) {
         // add parts button
         $("#addPartButton").click(function () {
             // runs getPart function that will confirm if part is genuine 
-            getPart($("#partNumber").val(), function (newPart) {
-                var amount = $("#partAmount").val();
+            var amount = $("#partAmount").val();
+            var partID = $("#partNumber").val();
+            getPart(partID, function (newPart) {
                 $("#partNumber").removeClass("is-invalid");
                 if (newPart) { // check if part was returned
                     price.parts.push({
@@ -93,16 +94,17 @@ function editPrice(modelId, priceId) {
                         description: newPart.description,
                         cost: newPart.cost
                     });
-                    // add part to parts_tmp, they'll be saved to database when form is successfully submitted
-                    listParts(price.parts);
 
-                    //after part is successfuly added clear add part fields
-                    $("#partNumber").val('');
-                    $("#partAmount").val('1');
                 } else {
-                    $("#partNumber").addClass("is-invalid");
-                    console.log("Couldn't find part number");
+                    price.parts.push({
+                        _id: partID,
+                        amount: amount
+                    });
                 }
+                listParts(price.parts);
+                //after part is successfuly added clear add part fields
+                $("#partNumber").val('');
+                $("#partAmount").val('1');
             });
         });
 
@@ -114,6 +116,14 @@ function editPrice(modelId, priceId) {
         $("#formElement").submit(function (e) {
             e.preventDefault();
             // TODO - some data validation
+
+            price.parts.forEach((part, i) => {
+                if(!part.description || !part.cost) {
+                    price.parts[i].description = $('#descriptionInput' + part._id).val();
+                    price.parts[i].cost = $('#costInput' + part._id).val();
+                    console.log(price.parts[i]);
+                }
+            });
         
             //take id from hidden id field
             $("#modelId").val();
@@ -148,40 +158,9 @@ function addPrice(modelId) {
     .done(form => {
         var model = mainData.find(model => model._id === modelId);
         $('#editFormContainer').html('').append(form);
+        $('#addPartsDiv').remove();
         $('#editPriceModal').modal('show');
         var price = {};
-        price.parts = [];
-
-        // add parts button
-        $("#addPartButton").click(function () {
-            // runs getPart function that will confirm if part is genuine 
-            getPart($("#partNumber").val(), function (newPart) {
-                var amount = $("#partAmount").val();
-                $("#partNumber").removeClass("is-invalid");
-                if (newPart) { // check if part was returned
-                    price.parts.push({
-                        _id:  newPart._id,
-                        amount: amount,
-                        description: newPart.description,
-                        cost: newPart.cost
-                    });
-                    // add part to parts_tmp, they'll be saved to database when form is successfully submitted
-                    listParts(price.parts);
-
-                    //after part is successfuly added clear add part fields
-                    $("#partNumber").val('');
-                    $("#partAmount").val('1');
-                } else {
-                    $("#partNumber").addClass("is-invalid");
-                    console.log("Couldn't find part number");
-                }
-            });
-        });
-
-        $("#removePartsButton").click(function () {
-                    price.parts = [];
-                    removeParts();
-        });
 
         $("#formElement").submit(function (e) {
             e.preventDefault();
@@ -214,7 +193,7 @@ function addPrice(modelId) {
 }
 
 
-function listParts(parts) {
+function listParts(parts = []) {
     var parts_html = '<div><label for="parts">Parts:</label></div>';
     parts.forEach((part) => {
         if(part.part){
@@ -222,13 +201,19 @@ function listParts(parts) {
             part.description = part.part.description;
             part.cost = part.part.cost
         }
-    parts_html += '<div class="row mt-2"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part._id + '"></div>';
+        var readonly = "readonly";
+        if(!part.description || !part.cost) {
+            part.description = "Description";
+            part.cost = "";
+            readonly = "";
+        }
+        parts_html += '<div class="row mt-2"><div class="col-9"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part._id + '"></div>';
         parts_html += '<div class="col"><input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.amount + '"></div></div>';
         parts_html +=   '<div class="row"><div class="col-9">' +
-                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + part.description + '">' +
+                            '<input type="text" id="descriptionInput' + part._id + '" class="form-control parts-text form-control-sm" ' + readonly + ' value="' + part.description + '">' +
                         '</div>' +
                         '<div class="col">' +
-                            '<input type="text" class="form-control parts-text form-control-sm" readonly value="' + (part.cost * 1.2).toFixed(2) + '">' +
+                            '<input type="text" id="costInput' + part._id + '" class="form-control parts-text form-control-sm" ' + readonly + ' value="' + (part.cost * 1.2).toFixed(2) + '">' +
                         '</div></div>';
     });
     $('#partsDiv').removeClass('hidden').html(parts_html);
@@ -328,8 +313,6 @@ function removeParts() {
     $('#partsDiv').addClass('hidden');
     
 }
-
-
 
 // function that wil check if part with partName exist and then run function cb with part object named partName
 function getPart(partName, cb) {

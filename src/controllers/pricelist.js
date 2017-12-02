@@ -165,43 +165,15 @@ exports.createPrice = function(req, res) {
             message(req, res, errmessage, "/"); 
         } else {
             var bodyPrice = req.body; // create bodyPrice Price element so it can be modified
-            var parts;
-
-            if(bodyPrice.parts) {
-                parts = bodyPrice.parts;    //\
-                delete bodyPrice.parts;     //  Move parts to seperate variable so Price.create won't throw an error and we can find and add them later to Price object.
-            }
 
             Price.create(bodyPrice, (err, price) => {
                 if(err || !price) {
                     var errmessage = err ? err.message : "Error, empty element was returned!";
                     message(req, res, errmessage, "/");  
                 } else {
-
                     model.prices.push(price); // push created price to model and save it, this doesn't have to wait for price to be updated with parts
-                    model.save();
-
-
-                    if(parts) { //Check if we have any parts
-                        var promise = []; // create array of promises to which primise for each found part will be saved
-                        parts.map(part => {                     
-                            promise.push(Part.findById(part._id, (err, foundPart) => { // add Part.findById for each part to promise 
-                                    if(err || !part){
-                                        var errmessage = err ? err.message : "Error, empty element was returned!";
-                                        message(req, res, errmessage, "/"); 
-                                    } else {    
-                                    price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
-                                }
-                            }).exec());
-                        });
-                        Promise.all(promise).then(function(){ // when all promises for Part.findById are resolved and every part is pushed to price we will save price
-                            price.save();
-                            res.json(price);
-                        });
-                    } else {
-                        res.json(price);
-                    } 
-
+                    model.save().
+                    then(res.json(price));
                 }
             });
         }
@@ -236,35 +208,50 @@ exports.updatePrice = function(req, res) {
             message(req, res, errmessage, "/");  
         } else {
             if(parts) { //Check if we have any parts
-                var promise = []; // create array of promises to which primise for each found part will be saved
+                var findPartsPromise = []; // create array of promises to which promise for each FOUND PART will be saved
                 parts.map(part => {             
-                    promise.push(Part.findById(part._id, (err, foundPart) => { // add Part.findById for each part to promise 
-                            if(err || !part){
-                                var errmessage = err ? err.message : "Error, empty element was returned!";
-                                message(req, res, errmessage, "/"); 
-                            } else {
-                                console.log('Found part: ' + foundPart) // THIS SHOULD BE ALWAYS FIRST LOG IN CONSOLE
-                                price.parts.push({part: foundPart, amount: part.amount}); // after we found a part we push it to parts array
-                        }
-                    }).exec());
+                    findPartsPromise.push(Part.findById(part._id));
                 });
-                Promise.all(promise)
-                .then(() => { // when all promises for Part.findById are resolved and every part is pushed to price we will save price
-                    price.save()
-                    .then(() => {
-                        console.log('Saved price: ' + price); // THIS SHOULD BE LATER
-                        res.json(price);
-                    })
-                    .catch(err => {
-                        var errmessage = err ? err.message : "Error, empty element was returned!";
-                        message(req, res, errmessage, "/"); 
-                    });                  
+                Promise.all(findPartsPromise)
+                .then((foundParts) => { // when all promises for Part.findById
+                    var newPartsPromise = []; // create array of promises to which promise of each NEW PART will be saved
+                    foundParts.forEach((foundPart) => {
+                        if(foundPart){
+                            let amount = parts.find(part => part._id == foundPart._id).amount;
+                            price.parts.push({part: foundPart, amount: amount}); // push found part to price.parts array
+                            parts = parts.filter(part => part._id != foundPart._id); // remove found part from parts array
+                        }
+                    });
+                    parts.forEach(newPart => {
+                        newPartsPromise.push(Part.create(newPart)); // for each part that wasn't found create new part
+                    });
+                    Promise.all(newPartsPromise)
+                    .then((newParts) => { // when all promises for Part.create are finished we will save new parts
+                        newParts.forEach((newPart) => {
+                            if(newPart){
+                                let amount = parts.find(part => part._id == newPart._id).amount;
+                                price.parts.push({part: newPart, amount: amount});
+                            }
+                        })
+                        price.save()
+                        .then(() => {
+                            res.json(price);
+                        })
+                        .catch(err => {
+                            var errmessage = err ? err.message : "Error, empty element was returned!";
+                            message(req, res, errmessage, "/"); 
+                        }); 
+                    })       
                 })
                 .catch(err => console.log(err));
             } else {
                 res.json(price);
             } 
         }
+    })
+    .catch(err => {
+        var errmessage = err.message;
+        message(req, res, errmessage, "/"); 
     });
 };
 
