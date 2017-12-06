@@ -102,7 +102,8 @@ exports.updateModel = function(req, res) {
 exports.deleteModel = function(req, res) {
     Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
         if(err || !model){
-            console.log(err);
+            var errmessage = err ? err.message : "Error!";
+            message(req, res, errmessage, "/"); 
         } else {
             model.prices.forEach(price => {
                 Price.findByIdAndRemove(price._id);
