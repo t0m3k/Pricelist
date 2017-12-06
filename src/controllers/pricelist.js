@@ -7,7 +7,8 @@ var Model                   = require('../models/pricelist/model'),
 exports.getParts = function(req, res) {
     Part.find({}, (err, parts) => {
         if(err || !parts) {
-            console.log(err);
+            var errmessage = err ? err.message : "Error!";
+            message(req, res, errmessage, "/"); 
         }
         res.json(parts);
     });
@@ -221,7 +222,8 @@ exports.updatePrice = function(req, res) {
 exports.deletePrice = function(req, res) {
     Model.findById(req.params.model).populate({path: "prices"}).exec((err, model) => {
         if(err || !model){
-            console.log(err);
+            var errmessage = err ? err.message : "Error!";
+            message(req, res, errmessage, "/"); 
         } else {
             if(!model.prices.every(price => {
                 return price._id != req.params.price;
@@ -229,7 +231,6 @@ exports.deletePrice = function(req, res) {
                 model.prices = model.prices.filter(price => {
                     return price._id != req.params.price;
                 });
-                console.log(req.params.price);
                 Price.findByIdAndRemove(req.params.price, function(err){
                     if(err){
                         var errmessage = err ? err.message : "Error!";
