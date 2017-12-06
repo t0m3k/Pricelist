@@ -56,6 +56,18 @@ exports.updatePart = function(req, res) {
     });
 }
 
+exports.deletePart = function(req, res) {
+    Part.findByIdAndRemove(req.params.part)
+    .then(function(){
+        var m = "Part removed successfully!";
+        message(req, res, m, "/"); 
+    })
+    .catch(function(err){
+        var errmessage = err ? err.message : "Error!";
+        message(req, res, errmessage, "/"); 
+    });
+}
+
 exports.createModel = function(req, res) {
     Model.create(req.body, (err, model) => {
         if(err || !model){

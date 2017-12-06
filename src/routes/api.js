@@ -18,12 +18,13 @@ router.route("/pricelist")
     .get(middleware.canRead, pricelist.getPricelist);
 
 router.route("/pricelist/parts") 
-    .get(middleware.canRead, pricelist.getParts);
+    .get(middleware.canRead, pricelist.getParts)
+    .post(middleware.canWrite, pricelist.createPart);
 
 router.route("/pricelist/parts/:part") 
-    .post(middleware.canWrite, pricelist.createPart)
+    .get(middleware.canRead, pricelist.getPart)
     .put(middleware.canWrite, pricelist.updatePart)
-    .get(middleware.canRead, pricelist.getPart);
+    .delete(middleware.canWrite, pricelist.deletePart);
 
 router.route("/pricelist/models")
     .get(middleware.canRead, pricelist.getModels)
@@ -32,8 +33,8 @@ router.route("/pricelist/models")
 
 router.route("/pricelist/models/:model")
     .get(middleware.canRead, pricelist.getModel)
-    .put(middleware.canWrite, pricelist.updateModel)
     .post(middleware.canWrite, pricelist.createPrice)
+    .put(middleware.canWrite, pricelist.updateModel)
     .delete(middleware.canWrite, pricelist.deleteModel);
 
 router.route("/pricelist/models/:model/:price")
