@@ -4,17 +4,6 @@ var Model                   = require('../models/pricelist/model'),
     helper                  = require('./pricelist_helper'),
     Price                   = require('../models/pricelist/Price');
 
-
-exports.getPricelist = function(req, res) {
-    Model.find({}).populate({path: "prices", populate: {path: "parts.part"} }).exec((err, model) => {
-        if(err || !model){
-            console.log(err);
-        } else {
-            res.json(model);
-        }
-    })
-}
-
 exports.getParts = function(req, res) {
     Part.find({}, (err, parts) => {
         if(err || !parts) {
@@ -169,7 +158,7 @@ exports.createPrice = function(req, res) {
                         });
                     } else {
                         res.json(price);
-                    } 
+                    }
                 }
             });
         }

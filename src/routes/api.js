@@ -15,7 +15,7 @@ router.get("/", function(req, res) {
 });
 
 router.route("/pricelist") 
-    .get(middleware.canRead, pricelist.getPricelist);
+    .get(middleware.canRead, pricelist.getModels);
 
 router.route("/pricelist/parts") 
     .get(middleware.canRead, pricelist.getParts)
