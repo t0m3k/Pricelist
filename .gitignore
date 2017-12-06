@@ -1,6 +1,0 @@
-node_modules/
-local_conf.js
-.jshintrc
-.eslintrc.json
-.vscode/
-.gitignore
