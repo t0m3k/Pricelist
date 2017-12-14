@@ -22,24 +22,35 @@ Now it's interactive pricelist including cost of items, labour and minimum price
 ## API routes
 
 ### /api
+
 *GET*: Current user privileges
 
+
 ### /api/pricelist
+
 *GET*: Get all pricelist models, prices and parts
+
 
 ### /api/pricelist/models
+
 *GET*: Get all pricelist models, prices and parts
+
 *POST*: Create new model
 
+
 ### /api/pricelist/models/:_id
+
 *GET*: Get model, prices and parts
+
 *UPDATE*: Update model
+
 `{
     _id: "Model-name",
     name: "Description",
 }`
 
 *POST*: Create new price
+
 `{
     name: "Screen assembly",
     labour: "50",
