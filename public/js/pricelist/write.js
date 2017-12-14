@@ -158,9 +158,42 @@ function addPrice(modelId) {
     .done(form => {
         var model = mainData.find(model => model._id === modelId);
         $('#editFormContainer').html('').append(form);
-        $('#addPartsDiv').remove();
         $('#editPriceModal').modal('show');
         var price = {};
+        price.parts = [];
+
+        // add parts button
+        $("#addPartButton").click(function () {
+            // runs getPart function that will confirm if part is genuine 
+            var amount = $("#partAmount").val();
+            var partID = $("#partNumber").val();
+            getPart(partID, function (newPart) {
+                $("#partNumber").removeClass("is-invalid");
+                if (newPart) { // check if part was returned
+                    price.parts.push({
+                        _id:  newPart._id,
+                        amount: amount,
+                        description: newPart.description,
+                        cost: newPart.cost
+                    });
+
+                } else {
+                    price.parts.push({
+                        _id: partID,
+                        amount: amount
+                    });
+                }
+                listParts(price.parts);
+                //after part is successfuly added clear add part fields
+                $("#partNumber").val('');
+                $("#partAmount").val('1');
+            });
+        });
+
+        $("#removePartsButton").click(function () {
+                    price.parts = [];
+                    removeParts();
+        });
 
         $("#formElement").submit(function (e) {
             e.preventDefault();

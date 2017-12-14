@@ -30,5 +30,5 @@ function drawTable() {
         basketTrigger(id);
     });
     addWrite();
-    calcBasket()
+    calcBasket();
 }
