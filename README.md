@@ -45,29 +45,52 @@ Now it's interactive pricelist including cost of items, labour and minimum price
 *UPDATE*: Update model
 
 `{
+
     _id: "Model-name",
+
     name: "Description",
+
 }`
+
 
 *POST*: Create new price
 
 `{
+
     name: "Screen assembly",
+    
     labour: "50",
+    
     parts: [
+    
         {
+    
             _id: "part-identifier",
+    
             description: "One of the parts needed for screen",
+    
             cost: "10",
+    
             amount: 1,
+    
         },
+    
         {
+    
             _id: "other-part-identifier",
+    
             description: "Other part needed for screen",
+    
             cost: "5",
+    
             amount: 3,
+    
         }
+    
     ],
+    
     min: 50,
+    
     second: 15
+
 }`
