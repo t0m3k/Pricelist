@@ -2,7 +2,7 @@ var Model                   = require('../models/pricelist/model'),
     Part                    = require('../models/pricelist/part'),
     message                 = require('../middleware').message,
     helper                  = require('./pricelist_helper'),
-    Price                   = require('../models/pricelist/Price');
+    Price                   = require('../models/pricelist/price');
 
 exports.getParts = function(req, res) {
     Part.find({}, (err, parts) => {
