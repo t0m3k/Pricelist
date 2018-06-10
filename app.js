@@ -64,9 +64,7 @@ app.use((req, res, next) => {
     next();
  });
 
-mongoose.connect(MONGODB, {
-    useMongoClient: true
-  });
+mongoose.connect(MONGODB);
 
 
 
