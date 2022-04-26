@@ -2,7 +2,7 @@
 
 ## What it is?
 
-Now it's interactive pricelist including cost of items, labour and minimum price. In future it will be whole ePOS where you'll be able to add customers, create receipts and print/download them.
+Now it's interactive pricelist including cost of items, labour and minimum price.
 
 ## What you need?
 
