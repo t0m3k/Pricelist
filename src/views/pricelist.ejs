@@ -1,4 +1,4 @@
-<% include partials/header %>
+<%- include ("partials/header") %>
 
 <nav class="navbar navbar-expand sticky-top navbar-dark bg-dark">
     <form class="form-inline my-2 my-lg-0">
@@ -16,10 +16,10 @@
         </li>
       </ul>
       <span class="navbar-text">
-        1: <span class="text-success" id="basket"></span>
-        2: <span class="text-info" id="min"></span>
+        Recommended price: <span class="text-success" id="basket"></span>
+        Minimal price: <span class="text-info" id="min"></span>
         <% if(currentUser.write){ %>
-        3: <span class="text-danger" id="partscost"></span>
+        Parts cost: <span class="text-danger" id="partscost"></span>
         <%  } %>
       </span>
   </nav>
@@ -55,4 +55,4 @@
 
 <%  } %>
 
-<% include partials/footer %>
+<%- include ("partials/footer") %>

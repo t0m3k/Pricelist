@@ -1,3 +1,6 @@
+// This should be rewriten. It was created before I have learned react, i knwe just basic JS
+
+
 addWrite = function(){
     addEditPrice(); // will add edit icon and listener to edit every price item
     addDeletePrice(); // add delete icon to every price item
@@ -85,6 +88,7 @@ function editPrice(modelId, priceId) {
             // runs getPart function that will confirm if part is genuine 
             var amount = $("#partAmount").val();
             var partID = $("#partNumber").val();
+            if (partID === "" || amount === "") return 0
             getPart(partID, function (newPart) {
                 $("#partNumber").removeClass("is-invalid");
                 if (newPart) { // check if part was returned
@@ -167,6 +171,7 @@ function addPrice(modelId) {
             // runs getPart function that will confirm if part is genuine 
             var amount = $("#partAmount").val();
             var partID = $("#partNumber").val();
+            if (partID === "" || amount === "") return 0
             getPart(partID, function (newPart) {
                 $("#partNumber").removeClass("is-invalid");
                 if (newPart) { // check if part was returned
